@@ -1,16 +1,19 @@
+using System.Linq;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace MonogameTextEditor.TextEditor
 {
     public class TextEditor
     {
-        private readonly ITextCollection _text;
+        private readonly ICaretEditor _editor;
         private KeyboardState _currentKeyboardState;
         private KeyboardState _oldKeyboardState;
 
-        public TextEditor(ITextCollection collection)
+        public TextEditor(ICaretEditor editor)
         {
-            _text = collection;
+            _editor = editor;
             _currentKeyboardState = Keyboard.GetState();
         }
 
@@ -22,7 +25,18 @@ namespace MonogameTextEditor.TextEditor
             var pressedKeys = _currentKeyboardState.GetPressedKeys();
             foreach (Keys key in pressedKeys)
             {
-                if (_oldKeyboardState.IsKeyUp(key))
+                if (pressedKeys.Contains(Keys.LeftControl) && _oldKeyboardState.IsKeyUp(key))
+                {
+                    switch (key)
+                    {
+                        case Keys.V:
+                            _editor.Insert(Clipboard.GetText());
+                            break;
+                        case Keys.C:
+                            Clipboard.SetText(_editor.GetCurrentLine());
+                            break;
+                    }
+                } else if (_oldKeyboardState.IsKeyUp(key))
                 {
                     switch (key)
                     {
@@ -30,28 +44,28 @@ namespace MonogameTextEditor.TextEditor
                             // Exit();
                             break;
                         case Keys.Back:
-                            _text.RemoveBackward();
+                            _editor.RemoveBackward();
                             break;
                         case Keys.Delete:
-                            _text.RemoveForward();
+                            _editor.RemoveForward();
                             break;
                         case Keys.Enter:
-                            _text.InsertAtCaretPosition("\n");
+                            _editor.Insert("\n");
                             break;
                         case Keys.Left:
-                            _text.MoveCaretRight(-1);
+                            _editor.MoveCaretRight(-1);
                             break;
                         case Keys.Right:
-                            _text.MoveCaretRight(1);
+                            _editor.MoveCaretRight(1);
                             break;
                         case Keys.Up:
-                            _text.MoveCaretDown(-1);
+                            _editor.MoveCaretDown(-1);
                             break;
                         case Keys.Down:
-                            _text.MoveCaretDown(1);
+                            _editor.MoveCaretDown(1);
                             break;
                         default:
-                            _text.InsertAtCaretPosition(key.ToString());
+                            _editor.Insert(key.ToString());
                             break;
                     }
                 }

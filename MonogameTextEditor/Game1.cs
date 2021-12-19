@@ -10,7 +10,7 @@ namespace MonogameTextEditor
 		private SpriteBatch _spriteBatch;
 		private SpriteFont _font;
 
-		private ITextCollection _text;
+		private ICaretEditor _editor;
 		private TextEditor.TextEditor _textEditor;
 		private TextPresenter _textPresenter;
 
@@ -19,12 +19,12 @@ namespace MonogameTextEditor
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
-			_text = new ArrayStringText();
+			_editor = new CaretEditor();
 		}
 
 		protected override void Initialize()
 		{
-			_textEditor = new TextEditor.TextEditor(_text);
+			_textEditor = new TextEditor.TextEditor(_editor);
 			base.Initialize();
 		}
 
@@ -32,7 +32,7 @@ namespace MonogameTextEditor
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			_font = Content.Load<SpriteFont>("myFont");
-			_textPresenter = new TextPresenter(_text, _font, GraphicsDevice);
+			_textPresenter = new TextPresenter(_editor, _font, GraphicsDevice);
 		}
 
 		protected override void Update(GameTime gameTime)
