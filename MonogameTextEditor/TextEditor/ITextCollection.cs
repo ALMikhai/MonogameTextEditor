@@ -17,6 +17,35 @@ namespace MonogameTextEditor.TextEditor
         string GetCurrentLine();
     }
 
+    public interface IText
+    {
+        // string Text { get; set; }
+        List<string> Text { get; set; }
+        void Insert(int line, int col, string text);
+        void Remove(int line, int col, int lenght);
+    }
+
+    public interface ICaretEditor
+    {
+        ICaretPosition Caret { get; set; }
+        IText Text { get; set; }
+        void RemoveForward();
+        void RemoveBackward();
+        void InsertAtCaretPosition(string s);
+        bool MoveCaretRight(int n);
+        bool MoveCaretDown(int n);
+        string GetCurrentLine();
+    }
+
+    public interface ISelectEditor
+    {
+        ICaretEditor CaretEditor { get; set; }
+        bool MoveSelectRight(int n);
+        bool MoveSelectDown(int n);
+        void RemoveSelect();
+        void ClearSelect();
+    }
+
     public class ArrayStringText : ITextCollection
     {
         private List<string> text;
