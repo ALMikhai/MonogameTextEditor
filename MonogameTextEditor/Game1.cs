@@ -2,52 +2,45 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonogameTextEditor.TextEditor;
 
-namespace MonogameTextEditor
-{
-	public class Game1 : Game
-	{
-		private GraphicsDeviceManager _graphics;
-		private SpriteBatch _spriteBatch;
-		private SpriteFont _font;
+namespace MonogameTextEditor {
+    public class Game1 : Game {
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private SpriteFont font;
 
-		private ICaretEditor _editor;
-		private TextEditor.TextEditor _textEditor;
-		private TextPresenter _textPresenter;
+        private readonly ISelectEditor editor;
+        private SelectTextEditor textEditor;
+        private SelectTextPresenter textPresenter;
 
-		public Game1()
-		{
-			_graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Content";
-			IsMouseVisible = true;
-			_editor = new CaretEditor();
-		}
+        public Game1() {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+            editor = new SelectEditor(new CaretEditor());
+        }
 
-		protected override void Initialize()
-		{
-			_textEditor = new TextEditor.TextEditor(_editor);
-			base.Initialize();
-		}
+        protected override void Initialize() {
+            textEditor = new SelectTextEditor(editor);
+            base.Initialize();
+        }
 
-		protected override void LoadContent()
-		{
-			_spriteBatch = new SpriteBatch(GraphicsDevice);
-			_font = Content.Load<SpriteFont>("myFont");
-			_textPresenter = new TextPresenter(_editor, _font, GraphicsDevice);
-		}
+        protected override void LoadContent() {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("myFont");
+            textPresenter = new SelectTextPresenter(editor, font, GraphicsDevice);
+        }
 
-		protected override void Update(GameTime gameTime)
-		{
-			_textEditor.Update();
-			base.Update(gameTime);
-		}
+        protected override void Update(GameTime gameTime) {
+            textEditor.Update();
+            base.Update(gameTime);
+        }
 
-		protected override void Draw(GameTime gameTime)
-		{
-			GraphicsDevice.Clear(Color.White);
-			_spriteBatch.Begin();
-			_textPresenter.Draw(_spriteBatch);
-			_spriteBatch.End();
-			base.Draw(gameTime);
-		}
-	}
+        protected override void Draw(GameTime gameTime) {
+            GraphicsDevice.Clear(Color.White);
+            spriteBatch.Begin();
+            textPresenter.Draw(spriteBatch);
+            spriteBatch.End();
+            base.Draw(gameTime);
+        }
+    }
 }
