@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using MonogameTextEditor.TextEditor;
 using NUnit.Framework;
 
@@ -160,6 +162,50 @@ namespace TextEditorTests {
             Assert.AreEqual(editor.TextContainer.ToString(), "Hello world!\r\n123321");
             Assert.AreEqual(editor.Caret.Line, 1);
             Assert.AreEqual(editor.Caret.Col, 3);
+        }
+
+        [Test]
+        public void Stress() {
+            var editor = new CaretEditor();
+            var n = 100000000;
+            var rand = new Random();
+
+            for (var i = 0; i < n; i++) {
+                var action = rand.Next() % 8;
+                switch (action) {
+                    case 0:
+                        editor.Insert(BuildRandomString(rand.Next() % 10));
+                        break;
+                    case 1:
+                        editor.Insert("\n");
+                        break;
+                    case 2:
+                        for (var j = 0; j < 5; j++)
+                            editor.RemoveBackward();
+                        break;
+                    case 3:
+                        for (var j = 0; j < 5; j++)
+                            editor.RemoveForward();
+                        break;
+                    default:
+                        editor.MoveCaretRight(rand.Next() % 7 * (rand.Next() % 2 == 1 ? -1 : 1));
+                        editor.MoveCaretDown(rand.Next() % 7 * (rand.Next() % 2 == 1 ? -1 : 1));
+                        break;
+                }
+            }
+        }
+
+        private string BuildRandomString(int length) {
+            var strBuild = new StringBuilder();
+            var random = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var flt = random.NextDouble();
+                var shift = Convert.ToInt32(Math.Floor(25 * flt));
+                strBuild.Append(Convert.ToChar(shift + 65));
+            }
+
+            return strBuild.ToString();
         }
     }
 }
