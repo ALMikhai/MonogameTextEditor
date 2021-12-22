@@ -60,6 +60,9 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         public void RemoveSelect() {
+            if (!HasSelection())
+                return;
+
             var firstCaret = StartPosition;
             var secondCaret = EndPosition;
 
