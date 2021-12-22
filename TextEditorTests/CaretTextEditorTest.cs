@@ -167,14 +167,14 @@ namespace TextEditorTests {
         [Test]
         public void Stress() {
             var editor = new CaretEditor();
-            var n = 100000000;
+            var n = 10000000;
             var rand = new Random();
 
             for (var i = 0; i < n; i++) {
                 var action = rand.Next() % 8;
                 switch (action) {
                     case 0:
-                        editor.Insert(BuildRandomString(rand.Next() % 10));
+                        editor.Insert(Utils.BuildRandomString(rand.Next() % 10));
                         break;
                     case 1:
                         editor.Insert("\n");
@@ -193,19 +193,6 @@ namespace TextEditorTests {
                         break;
                 }
             }
-        }
-
-        private string BuildRandomString(int length) {
-            var strBuild = new StringBuilder();
-            var random = new Random();
-            for (var i = 0; i < length; i++)
-            {
-                var flt = random.NextDouble();
-                var shift = Convert.ToInt32(Math.Floor(25 * flt));
-                strBuild.Append(Convert.ToChar(shift + 65));
-            }
-
-            return strBuild.ToString();
         }
     }
 }
