@@ -1,14 +1,11 @@
 using MonogameTextEditor.TextEditor;
 using NUnit.Framework;
 
-namespace TextEditorTests
-{
+namespace TextEditorTests {
     [TestFixture]
-    public class CaretTextEditorTest
-    {
+    public class CaretTextEditorTest {
         [Test]
-        public void Create()
-        {
+        public void Create() {
             var editor = new CaretEditor();
             Assert.AreEqual(editor.TextContainer.ToString(), "");
             Assert.AreEqual(editor.Caret.Line, 0);
@@ -16,8 +13,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void InsertLine()
-        {
+        public void InsertLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             Assert.AreEqual(editor.TextContainer.ToString(), "Hello world!");
@@ -26,8 +22,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void InsertTwoLine()
-        {
+        public void InsertTwoLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -38,8 +33,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretLeft()
-        {
+        public void MoveCaretLeft() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.MoveCaretRight(-2);
@@ -49,8 +43,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretRight()
-        {
+        public void MoveCaretRight() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.MoveCaretRight(-5);
@@ -61,8 +54,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretUp()
-        {
+        public void MoveCaretUp() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -76,8 +68,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretDown()
-        {
+        public void MoveCaretDown() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -92,8 +83,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretRightAtEndOfLine()
-        {
+        public void MoveCaretRightAtEndOfLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -108,8 +98,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void MoveCaretLeftAtStartOfLine()
-        {
+        public void MoveCaretLeftAtStartOfLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -123,8 +112,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void RemoveBackward()
-        {
+        public void RemoveBackward() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.RemoveBackward();
@@ -134,8 +122,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void RemoveForward()
-        {
+        public void RemoveForward() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.MoveCaretRight(-3);
@@ -146,8 +133,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void RemoveBackwardAtStartOfLine()
-        {
+        public void RemoveBackwardAtStartOfLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
@@ -162,8 +148,7 @@ namespace TextEditorTests
         }
 
         [Test]
-        public void RemoveForwardAtEndOfLine()
-        {
+        public void RemoveForwardAtEndOfLine() {
             var editor = new CaretEditor();
             editor.Insert("Hello world!");
             editor.Insert("\n");
