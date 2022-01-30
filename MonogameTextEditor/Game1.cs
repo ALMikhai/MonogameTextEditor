@@ -31,7 +31,7 @@ namespace MonogameTextEditor {
         }
 
         protected override void Update(GameTime gameTime) {
-            textEditor.Update();
+            CmdObserver.Update();
             base.Update(gameTime);
         }
 
