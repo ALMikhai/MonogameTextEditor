@@ -84,7 +84,7 @@ namespace MonogameTextEditor.TextEditor {
                             _editor.Insert(Clipboard.GetText());
                             break;
                         case Keys.C:
-                            Clipboard.SetText(_editor.CaretEditor.GetCurrentLine());
+                            Clipboard.SetText(_editor.GetSelectedText());
                             break;
                     }
                 else if (pressedKeys.Contains(Keys.LeftShift) && _oldKeyboardState.IsKeyUp(key))

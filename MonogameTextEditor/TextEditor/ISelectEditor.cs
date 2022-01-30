@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace MonogameTextEditor.TextEditor {
     public interface ISelectEditor {
@@ -16,6 +17,7 @@ namespace MonogameTextEditor.TextEditor {
         void RemoveBackward();
         bool MoveCaretRight(int n);
         bool MoveCaretDown(int n);
+        string GetSelectedText();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -121,6 +123,32 @@ namespace MonogameTextEditor.TextEditor {
                 ClearSelection();
 
             return CaretEditor.MoveCaretDown(n);
+        }
+
+        public string GetSelectedText() {
+            if (!HasSelection())
+                return CaretEditor.GetCurrentLine();
+
+            var res = new StringBuilder();
+            var firstCaret = StartPosition;
+            var secondCaret = EndPosition;
+
+            if (firstCaret > secondCaret)
+                (firstCaret, secondCaret) = (secondCaret, firstCaret);
+
+            if (firstCaret.Line == secondCaret.Line) {
+                res.Append(Text[firstCaret.Line][firstCaret.Col..secondCaret.Col]);
+            } else {
+                res.AppendLine(Text[firstCaret.Line][firstCaret.Col..Text[firstCaret.Line].Length]);
+
+                for (var i = firstCaret.Line + 1; i < secondCaret.Line; i++) {
+                    res.AppendLine(Text[i]);
+                }
+
+                res.Append(Text[secondCaret.Line][0..secondCaret.Col]);
+            }
+
+            return res.ToString();
         }
     }
 }
