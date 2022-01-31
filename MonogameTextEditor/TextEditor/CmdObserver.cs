@@ -75,6 +75,9 @@ namespace MonogameTextEditor.TextEditor {
                             case Keys.A:
                                 SelectAll?.Invoke();
                                 break;
+                            case Keys.X:
+                                Cut?.Invoke();
+                                break;
                         }
                 }
                 else if (pressedKeys.Contains(Keys.LeftShift)) {
