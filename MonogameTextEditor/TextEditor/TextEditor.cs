@@ -49,6 +49,7 @@ namespace MonogameTextEditor.TextEditor {
 
             CmdObserver.SelectWordNext += selectEditor.MoveSelectToNextWord;
             CmdObserver.SelectWordPrev += selectEditor.MoveSelectToPrevWord;
+            CmdObserver.SelectAll += selectEditor.SelectAll;
         }
     }
 }

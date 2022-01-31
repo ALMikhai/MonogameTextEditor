@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonogameTextEditor.TextEditor {
@@ -22,6 +23,7 @@ namespace MonogameTextEditor.TextEditor {
         void MoveSelectToPrevWord();
         void MoveCaretToNextWord();
         void MoveCaretToPrevWord();
+        void SelectAll();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -180,6 +182,14 @@ namespace MonogameTextEditor.TextEditor {
                 ClearSelection();
 
             CaretEditor.MoveCaretToPrevWord();
+        }
+
+        public void SelectAll() {
+            StartPosition.Line = 0;
+            StartPosition.Col = 0;
+            EndPosition.Line = Text.Count - 1;
+            EndPosition.Col = Text.Last().Length;
+            CaretEditor.Caret.AssignFrom(EndPosition);
         }
 
         private (ICaretPosition firstCaret, ICaretPosition fecondCaret) GetSortedCarets() {

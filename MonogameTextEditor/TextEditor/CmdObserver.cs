@@ -72,6 +72,9 @@ namespace MonogameTextEditor.TextEditor {
                             case Keys.Right:
                                 MoveWordNext?.Invoke();
                                 break;
+                            case Keys.A:
+                                SelectAll?.Invoke();
+                                break;
                         }
                 }
                 else if (pressedKeys.Contains(Keys.LeftShift)) {
