@@ -69,11 +69,7 @@ namespace MonogameTextEditor.TextEditor {
             if (!HasSelection())
                 return;
 
-            var firstCaret = StartPosition;
-            var secondCaret = EndPosition;
-
-            if (firstCaret > secondCaret)
-                (firstCaret, secondCaret) = (secondCaret, firstCaret);
+            var (firstCaret, secondCaret) = GetSortedCarets();
 
             if (firstCaret.Line == secondCaret.Line) {
                 CaretEditor.TextContainer.Remove(firstCaret.Line, firstCaret.Col, secondCaret.Col - firstCaret.Col);
@@ -116,15 +112,20 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         public bool MoveCaretRight(int n) {
-            if (HasSelection())
-                ClearSelection();
-
-            return CaretEditor.MoveCaretRight(n);
+            if (!HasSelection())
+                return CaretEditor.MoveCaretRight(n);
+            var (firstCaret, secondCaret) = GetSortedCarets();
+            CaretEditor.Caret.AssignFrom(n < 0 ? firstCaret : secondCaret);
+            ClearSelection();
+            return true;
         }
 
         public bool MoveCaretDown(int n) {
-            if (HasSelection())
+            if (HasSelection()) {
+                var (firstCaret, secondCaret) = GetSortedCarets();
+                CaretEditor.Caret.AssignFrom(n < 0 ? firstCaret : secondCaret);
                 ClearSelection();
+            }
 
             return CaretEditor.MoveCaretDown(n);
         }
@@ -134,11 +135,7 @@ namespace MonogameTextEditor.TextEditor {
                 return CaretEditor.GetCurrentLine();
 
             var res = new StringBuilder();
-            var firstCaret = StartPosition;
-            var secondCaret = EndPosition;
-
-            if (firstCaret > secondCaret)
-                (firstCaret, secondCaret) = (secondCaret, firstCaret);
+            var (firstCaret, secondCaret) = GetSortedCarets();
 
             if (firstCaret.Line == secondCaret.Line) {
                 res.Append(Text[firstCaret.Line][firstCaret.Col..secondCaret.Col]);
@@ -183,6 +180,16 @@ namespace MonogameTextEditor.TextEditor {
                 ClearSelection();
 
             CaretEditor.MoveCaretToPrevWord();
+        }
+
+        private (ICaretPosition firstCaret, ICaretPosition fecondCaret) GetSortedCarets() {
+            var firstCaret = StartPosition;
+            var secondCaret = EndPosition;
+
+            if (firstCaret > secondCaret)
+                (firstCaret, secondCaret) = (secondCaret, firstCaret);
+
+            return (firstCaret, secondCaret);
         }
     }
 }
