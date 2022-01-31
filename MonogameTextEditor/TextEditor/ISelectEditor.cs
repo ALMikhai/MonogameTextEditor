@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,8 @@ namespace MonogameTextEditor.TextEditor {
         void MoveCaretToNextWord();
         void MoveCaretToPrevWord();
         void SelectAll();
+        void MoveCaretToEndOfLine();
+        void MoveCaretToStartOfLine();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -192,6 +195,25 @@ namespace MonogameTextEditor.TextEditor {
             CaretEditor.Caret.AssignFrom(EndPosition);
         }
 
+        public void MoveCaretToEndOfLine() {
+            if (HasSelection()) {
+                var (_, secondCaret) = GetSortedCarets();
+                CaretEditor.Caret.AssignFrom(secondCaret);
+                ClearSelection();
+            }
+
+            CaretEditor.MoveCaretToEndOfLine();
+        }
+
+        public void MoveCaretToStartOfLine() {
+            if (HasSelection()) {
+                var (firstCaret, _) = GetSortedCarets();
+                CaretEditor.Caret.AssignFrom(firstCaret);
+                ClearSelection();
+            }
+
+            CaretEditor.MoveCaretToStartOfLine();
+        }
         private (ICaretPosition firstCaret, ICaretPosition fecondCaret) GetSortedCarets() {
             var firstCaret = StartPosition;
             var secondCaret = EndPosition;
