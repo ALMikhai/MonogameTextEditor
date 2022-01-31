@@ -46,7 +46,18 @@ namespace MonogameTextEditor.TextEditor {
             currentKeyboardState = Keyboard.GetState();
             var pressedKeys = currentKeyboardState.GetPressedKeys();
             foreach (var key in pressedKeys)
-                if (pressedKeys.Contains(Keys.LeftControl)) {
+                if (pressedKeys.Contains(Keys.LeftControl) && pressedKeys.Contains(Keys.LeftShift)) {
+                    if (oldKeyboardState.IsKeyUp(key))
+                        switch (key) {
+                            case Keys.Left:
+                                SelectWordPrev?.Invoke();
+                                break;
+                            case Keys.Right:
+                                SelectWordNext?.Invoke();
+                                break;
+                        }
+                }
+                else if (pressedKeys.Contains(Keys.LeftControl)) {
                     if (oldKeyboardState.IsKeyUp(key))
                         switch (key) {
                             case Keys.V:
