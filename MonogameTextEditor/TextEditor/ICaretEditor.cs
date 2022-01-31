@@ -12,6 +12,10 @@ namespace MonogameTextEditor.TextEditor {
         bool MoveCaretRight(int n);
         bool MoveCaretDown(int n);
         string GetCurrentLine();
+        (int Line, int Col) GetNextWordPos();
+        (int Line, int Col) GetPrevWordPos();
+        void MoveCaretToNextWord();
+        void MoveCaretToPrevWord();
     }
 
     public class CaretEditor : ICaretEditor {
@@ -85,6 +89,50 @@ namespace MonogameTextEditor.TextEditor {
             }
 
             return false;
+        }
+
+        public void MoveCaretToNextWord() {
+            var pos = GetNextWordPos();
+            Caret.Col = pos.Col;
+            Caret.Line = pos.Line;
+        }
+
+        public void MoveCaretToPrevWord() {
+            var pos = GetPrevWordPos();
+            Caret.Col = pos.Col;
+            Caret.Line = pos.Line;
+        }
+
+        public (int Line, int Col) GetNextWordPos() {
+            var pos = (Caret.Line, Caret.Col);
+            var line = Text[pos.Line];
+            if (line.Length == pos.Col) {
+                return Text.Count == (pos.Line + 1) ? (pos.Line, pos.Col) : (pos.Line + 1, 0);
+            }
+            while (line.Length > pos.Col && !char.IsWhiteSpace(line[pos.Col])) {
+                pos.Col++;
+            }
+            while (line.Length > pos.Col && char.IsWhiteSpace(line[pos.Col])) {
+                pos.Col++;
+            }
+
+            return pos;
+        }
+
+        public (int Line, int Col) GetPrevWordPos() {
+            var pos = (Caret.Line, Caret.Col);
+            var line = Text[pos.Line];
+            if (0 == pos.Col) {
+                return 0 == pos.Line ? (pos.Line, pos.Col) : (pos.Line - 1, Text[pos.Line - 1].Length);
+            }
+            while (0 < pos.Col && char.IsWhiteSpace(line[pos.Col - 1])) {
+                pos.Col--;
+            }
+            while (0 < pos.Col && !char.IsWhiteSpace(line[pos.Col - 1])) {
+                pos.Col--;
+            }
+
+            return pos;
         }
 
         public string GetCurrentLine() {

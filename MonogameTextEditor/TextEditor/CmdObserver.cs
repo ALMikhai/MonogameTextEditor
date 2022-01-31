@@ -55,6 +55,12 @@ namespace MonogameTextEditor.TextEditor {
                             case Keys.C:
                                 Copy?.Invoke();
                                 break;
+                            case Keys.Left:
+                                MoveWordPrev?.Invoke();
+                                break;
+                            case Keys.Right:
+                                MoveWordNext?.Invoke();
+                                break;
                         }
                 }
                 else if (pressedKeys.Contains(Keys.LeftShift)) {
@@ -96,6 +102,9 @@ namespace MonogameTextEditor.TextEditor {
                             break;
                         case Keys.Down:
                             MoveLineNext?.Invoke();
+                            break;
+                        case Keys.Space:
+                            OnTextInsert?.Invoke(" ");
                             break;
                         default:
                             OnTextInsert?.Invoke(key.ToString());
