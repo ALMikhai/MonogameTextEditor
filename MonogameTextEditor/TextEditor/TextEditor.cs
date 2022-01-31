@@ -41,6 +41,9 @@ namespace MonogameTextEditor.TextEditor {
             CmdObserver.SelectCharPrev += () => selectEditor.MoveSelectRight(-1);
             CmdObserver.SelectLineNext += () => selectEditor.MoveSelectDown(1);
             CmdObserver.SelectLinePrev += () => selectEditor.MoveSelectDown(-1);
+
+            CmdObserver.MoveWordNext += selectEditor.CaretEditor.MoveCaretToNextWord;
+            CmdObserver.MoveWordPrev += selectEditor.CaretEditor.MoveCaretToPrevWord;
         }
     }
 }
