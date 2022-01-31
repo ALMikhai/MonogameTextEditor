@@ -27,6 +27,7 @@ namespace MonogameTextEditor.TextEditor {
         void SelectAll();
         void MoveCaretToEndOfLine();
         void MoveCaretToStartOfLine();
+        string CutSelectedText();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -214,6 +215,25 @@ namespace MonogameTextEditor.TextEditor {
 
             CaretEditor.MoveCaretToStartOfLine();
         }
+
+        public string CutSelectedText() {
+            var res = GetSelectedText();
+            if (HasSelection()) {
+                RemoveSelect();
+            }
+            else {
+                CaretEditor.MoveCaretToStartOfLine();
+                var pos = CaretEditor.Caret;
+                if (Text.Count == pos.Line + 1) {
+                    CaretEditor.TextContainer.Remove(pos.Line, 0, Text[pos.Line].Length);
+                }
+                else {
+                    CaretEditor.TextContainer.RemoveLine(pos.Line);
+                }
+            }
+            return res;
+        }
+
         private (ICaretPosition firstCaret, ICaretPosition fecondCaret) GetSortedCarets() {
             var firstCaret = StartPosition;
             var secondCaret = EndPosition;

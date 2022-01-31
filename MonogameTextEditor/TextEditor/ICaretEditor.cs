@@ -146,7 +146,7 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         public string GetCurrentLine() {
-            return Text[Caret.Line];
+            return Text[Caret.Line] + (Caret.Line + 1 == Text.Count ? "" : "\n");
         }
     }
 }

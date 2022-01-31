@@ -15,7 +15,11 @@ namespace MonogameTextEditor.TextEditor {
             CmdObserver.MoveLinePrev += () => caretEditor.MoveCaretDown(-1);
             CmdObserver.MoveLineNext += () => caretEditor.MoveCaretRight(1);
             CmdObserver.OnTextInsert += caretEditor.Insert;
-            CmdObserver.Copy += () => Clipboard.SetText(caretEditor.GetCurrentLine());
+            CmdObserver.Copy += () => {
+                var text = caretEditor.GetCurrentLine();
+                if (!string.IsNullOrEmpty(text))
+                    Clipboard.SetText(text);
+            };
             CmdObserver.Paste += () => caretEditor.Insert(Clipboard.GetText());
             CmdObserver.MoveWordNext += caretEditor.MoveCaretToNextWord;
             CmdObserver.MoveWordPrev += caretEditor.MoveCaretToPrevWord;
@@ -39,7 +43,11 @@ namespace MonogameTextEditor.TextEditor {
 
             CmdObserver.BackSpace += selectEditor.RemoveBackward;
             CmdObserver.Delete += selectEditor.RemoveForward;
-            CmdObserver.Copy += () => Clipboard.SetText(selectEditor.GetSelectedText());
+            CmdObserver.Copy += () => {
+                var text = selectEditor.GetSelectedText();
+                if (!string.IsNullOrEmpty(text))
+                    Clipboard.SetText(text);
+            };
             CmdObserver.Paste += () => selectEditor.Insert(Clipboard.GetText());
             CmdObserver.SelectCharNext += () => selectEditor.MoveSelectRight(1);
             CmdObserver.SelectCharPrev += () => selectEditor.MoveSelectRight(-1);
@@ -54,6 +62,11 @@ namespace MonogameTextEditor.TextEditor {
             CmdObserver.SelectAll += selectEditor.SelectAll;
             CmdObserver.MoveLineStart += selectEditor.MoveCaretToStartOfLine;
             CmdObserver.MoveLineEnd += selectEditor.MoveCaretToEndOfLine;
+            CmdObserver.Cut += () => {
+                var text = selectEditor.CutSelectedText();
+                if (!string.IsNullOrEmpty(text))
+                    Clipboard.SetText(text);
+            };
         }
     }
 }
