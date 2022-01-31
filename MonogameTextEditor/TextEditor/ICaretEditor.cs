@@ -16,6 +16,8 @@ namespace MonogameTextEditor.TextEditor {
         (int Line, int Col) GetPrevWordPos();
         void MoveCaretToNextWord();
         void MoveCaretToPrevWord();
+        void MoveCaretToEndOfLine();
+        void MoveCaretToStartOfLine();
     }
 
     public class CaretEditor : ICaretEditor {
@@ -101,6 +103,14 @@ namespace MonogameTextEditor.TextEditor {
             var pos = GetPrevWordPos();
             Caret.Col = pos.Col;
             Caret.Line = pos.Line;
+        }
+
+        public void MoveCaretToEndOfLine() {
+            Caret.Col = Text[Caret.Line].Length;
+        }
+
+        public void MoveCaretToStartOfLine() {
+            Caret.Col = 0;
         }
 
         public (int Line, int Col) GetNextWordPos() {

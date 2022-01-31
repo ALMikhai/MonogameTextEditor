@@ -120,6 +120,12 @@ namespace MonogameTextEditor.TextEditor {
                         case Keys.Space:
                             OnTextInsert?.Invoke(" ");
                             break;
+                        case Keys.Home:
+                            MoveLineStart?.Invoke();
+                            break;
+                        case Keys.End:
+                            MoveLineEnd?.Invoke();
+                            break;
                         default:
                             OnTextInsert?.Invoke(key.ToString());
                             break;
