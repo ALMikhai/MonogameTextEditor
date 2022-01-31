@@ -17,6 +17,8 @@ namespace MonogameTextEditor.TextEditor {
             CmdObserver.OnTextInsert += caretEditor.Insert;
             CmdObserver.Copy += () => Clipboard.SetText(caretEditor.GetCurrentLine());
             CmdObserver.Paste += () => caretEditor.Insert(Clipboard.GetText());
+            CmdObserver.MoveWordNext += caretEditor.MoveCaretToNextWord;
+            CmdObserver.MoveWordPrev += caretEditor.MoveCaretToPrevWord;
         }
     }
 
@@ -42,8 +44,11 @@ namespace MonogameTextEditor.TextEditor {
             CmdObserver.SelectLineNext += () => selectEditor.MoveSelectDown(1);
             CmdObserver.SelectLinePrev += () => selectEditor.MoveSelectDown(-1);
 
-            CmdObserver.MoveWordNext += selectEditor.CaretEditor.MoveCaretToNextWord;
-            CmdObserver.MoveWordPrev += selectEditor.CaretEditor.MoveCaretToPrevWord;
+            CmdObserver.MoveWordNext += selectEditor.MoveCaretToNextWord;
+            CmdObserver.MoveWordPrev += selectEditor.MoveCaretToPrevWord;
+
+            CmdObserver.SelectWordNext += selectEditor.MoveSelectToNextWord;
+            CmdObserver.SelectWordPrev += selectEditor.MoveSelectToPrevWord;
         }
     }
 }

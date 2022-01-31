@@ -18,6 +18,10 @@ namespace MonogameTextEditor.TextEditor {
         bool MoveCaretRight(int n);
         bool MoveCaretDown(int n);
         string GetSelectedText();
+        void MoveSelectToNextWord();
+        void MoveSelectToPrevWord();
+        void MoveCaretToNextWord();
+        void MoveCaretToPrevWord();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -149,6 +153,36 @@ namespace MonogameTextEditor.TextEditor {
             }
 
             return res.ToString();
+        }
+
+        public void MoveSelectToNextWord() {
+            if (!HasSelection())
+                ClearSelection();
+
+            CaretEditor.MoveCaretToNextWord();
+            EndPosition.AssignFrom(CaretEditor.Caret);
+        }
+
+        public void MoveSelectToPrevWord() {
+            if (!HasSelection())
+                ClearSelection();
+
+            CaretEditor.MoveCaretToPrevWord();
+            EndPosition.AssignFrom(CaretEditor.Caret);
+        }
+
+        public void MoveCaretToNextWord() {
+            if (HasSelection())
+                ClearSelection();
+
+            CaretEditor.MoveCaretToNextWord();
+        }
+
+        public void MoveCaretToPrevWord() {
+            if (HasSelection())
+                ClearSelection();
+
+            CaretEditor.MoveCaretToPrevWord();
         }
     }
 }
