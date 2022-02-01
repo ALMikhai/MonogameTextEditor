@@ -1,5 +1,4 @@
 using System;
-using Microsoft.VisualStudio.TestPlatform.Common.Interfaces;
 using MonogameTextEditor.TextEditor;
 using NUnit.Framework;
 
@@ -10,7 +9,7 @@ namespace TextEditorTests {
         public void InsertWithoutSelection() {
             var editor = new SelectEditor(new CaretEditor());
             editor.Insert("Hello world!");
-            Assert.AreEqual(editor.CaretEditor.TextContainer.ToString(), "Hello world!");
+            Assert.AreEqual(editor.CaretEditor.Text.ToString(), "Hello world!");
             Assert.IsFalse(editor.HasSelection());
         }
 
@@ -69,7 +68,7 @@ namespace TextEditorTests {
             editor.MoveSelectRight(-3);
             Assert.IsTrue(editor.HasSelection());
             editor.Insert(" 123");
-            Assert.AreEqual(editor.CaretEditor.TextContainer.ToString(), "Hello wor 123");
+            Assert.AreEqual(editor.CaretEditor.Text.ToString(), "Hello wor 123");
             Assert.IsFalse(editor.HasSelection());
             Assert.AreEqual(editor.CaretEditor.Caret.Col, 13);
         }
@@ -81,14 +80,14 @@ namespace TextEditorTests {
             editor.MoveSelectRight(-2);
             Assert.IsTrue(editor.HasSelection());
             editor.RemoveForward();
-            Assert.AreEqual(editor.CaretEditor.TextContainer.ToString(), "Hello worl");
+            Assert.AreEqual(editor.CaretEditor.Text.ToString(), "Hello worl");
             Assert.IsFalse(editor.HasSelection());
 
             editor.Insert("d!");
             editor.MoveSelectRight(-2);
             Assert.IsTrue(editor.HasSelection());
             editor.RemoveBackward();
-            Assert.AreEqual(editor.CaretEditor.TextContainer.ToString(), "Hello worl");
+            Assert.AreEqual(editor.CaretEditor.Text.ToString(), "Hello worl");
             Assert.IsFalse(editor.HasSelection());
         }
 
@@ -101,7 +100,7 @@ namespace TextEditorTests {
             editor.ClearSelection();
             Assert.IsFalse(editor.HasSelection());
             editor.Insert("123");
-            Assert.AreEqual(editor.CaretEditor.TextContainer.ToString(), "Hello worl123d!");
+            Assert.AreEqual(editor.CaretEditor.Text.ToString(), "Hello worl123d!");
         }
 
         [Test]

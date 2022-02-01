@@ -21,7 +21,7 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         private void DrawText(SpriteBatch sb) {
-            sb.DrawString(font, editor.TextContainer.ToString(), Vector2.Zero, Color.Black, 0, Vector2.Zero, 1.0f,
+            sb.DrawString(font, editor.Text.ToString(), Vector2.Zero, Color.Black, 0, Vector2.Zero, 1.0f,
                 SpriteEffects.None, 0.5f);
         }
 

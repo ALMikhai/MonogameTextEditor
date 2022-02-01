@@ -3,45 +3,53 @@ using System.Text;
 
 namespace MonogameTextEditor.TextEditor {
     public interface ITextCollection {
-        List<string> Text { get; }
         void Insert(int line, int col, string text);
         void Remove(int line, int col, int lenght);
         void InsertLine(int line, string text);
         void RemoveLine(int line);
+        string GetLine(int line);
+        int GetLineLenght(int line);
+        int GetLineCount();
+        string this[int line] => GetLine(line);
     }
 
     public class ArrayStringText : ITextCollection {
-        public List<string> Text { get; } = new List<string> { "" };
-
+        private readonly List<string> text = new List<string> { "" };
         private string cachedString = "";
         private bool textUpdated = false;
 
         public void Insert(int line, int col, string text) {
-            Text[line] = Text[line].Insert(col, text);
+            this.text[line] = this.text[line].Insert(col, text);
             textUpdated = true;
         }
 
         public void Remove(int line, int col, int lenght) {
-            Text[line] = Text[line].Remove(col, lenght);
+            text[line] = text[line].Remove(col, lenght);
             textUpdated = true;
         }
 
         public void RemoveLine(int line) {
-            Text.RemoveAt(line);
+            text.RemoveAt(line);
             textUpdated = true;
         }
 
+        public string GetLine(int line) => text[line];
+
+        public int GetLineLenght(int line) => text[line].Length;
+
+        public int GetLineCount() => text.Count;
+
         public void InsertLine(int line, string text) {
-            Text.Insert(line, text);
+            this.text.Insert(line, text);
             textUpdated = true;
         }
 
         public override string ToString() {
             if (textUpdated) {
                 var builder = new StringBuilder();
-                for (var i = 0; i < Text.Count; i++) {
-                    var line = Text[i];
-                    var isLastLine = i == Text.Count - 1;
+                for (var i = 0; i < text.Count; i++) {
+                    var line = text[i];
+                    var isLastLine = i == text.Count - 1;
                     if (isLastLine)
                         builder.Append(line);
                     else
