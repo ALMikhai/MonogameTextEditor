@@ -95,6 +95,12 @@ namespace MonogameTextEditor.TextEditor {
                             case Keys.Down:
                                 SelectLineNext?.Invoke();
                                 break;
+                            case Keys.Home:
+                                SelectLineStart?.Invoke();
+                                break;
+                            case Keys.End:
+                                SelectLineEnd?.Invoke();
+                                break;
                         }
                 }
                 else if (oldKeyboardState.IsKeyUp(key)) {
