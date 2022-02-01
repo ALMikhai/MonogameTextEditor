@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace MonogameTextEditor.TextEditor {
     public interface ICaretEditor {
-        ICaretPosition Caret { get; set; }
-        ITextCollection TextContainer { get; set; }
-        List<string> Text { get; }
+        ICaretPosition Caret { get; }
+        ITextCollection Text { get; }
         void RemoveForward();
         void RemoveBackward();
         void Insert(string s);
@@ -21,17 +20,17 @@ namespace MonogameTextEditor.TextEditor {
     }
 
     public class CaretEditor : ICaretEditor {
-        public ICaretPosition Caret { get; set; } = new DrawableCaret();
-        public ITextCollection TextContainer { get; set; } = new ArrayStringText();
-        public List<string> Text => TextContainer.Text;
+        public ICaretPosition Caret { get; } = new DrawableCaret();
+        public ITextCollection Text { get; } = new ArrayStringText();
 
         public void RemoveForward() {
-            if (Caret.Line + 1 < Text.Count && Caret.Col == Text[Caret.Line].Length) {
+            var curLineLenght = Text[Caret.Line].Length;
+            if (Caret.Line + 1 < Text.GetLineCount() && Caret.Col == curLineLenght) {
                 var line = Text[Caret.Line + 1];
-                TextContainer.RemoveLine(Caret.Line + 1);
-                TextContainer.Insert(Caret.Line, Text[Caret.Line].Length, line);
+                Text.RemoveLine(Caret.Line + 1);
+                Text.Insert(Caret.Line, curLineLenght, line);
             }
-            else if (Caret.Col < Text[Caret.Line].Length) TextContainer.Remove(Caret.Line, Caret.Col, 1);
+            else if (Caret.Col < curLineLenght) Text.Remove(Caret.Line, Caret.Col, 1);
         }
 
         public void RemoveBackward() {
@@ -41,21 +40,17 @@ namespace MonogameTextEditor.TextEditor {
 
         public void Insert(string s) {
             var lines = s.Split('\n');
-
             var firstPart = Text[Caret.Line].Substring(0, Caret.Col);
             var secondPart = Text[Caret.Line].Substring(Caret.Col, Text[Caret.Line].Length - Caret.Col);
-
-            TextContainer.Remove(Caret.Line, Caret.Col, Text[Caret.Line].Length - Caret.Col);
-            TextContainer.Insert(Caret.Line, firstPart.Length, lines[0]);
-
+            Text.Remove(Caret.Line, Caret.Col, Text[Caret.Line].Length - Caret.Col);
+            Text.Insert(Caret.Line, firstPart.Length, lines[0]);
             for (var i = 1; i < lines.Length; i++) {
                 var line = lines[i];
                 Caret.Line++;
-                TextContainer.InsertLine(Caret.Line, line);
+                Text.InsertLine(Caret.Line, line);
             }
-
             Caret.Col = Text[Caret.Line].Length;
-            TextContainer.Insert(Caret.Line, Text[Caret.Line].Length, secondPart);
+            Text.Insert(Caret.Line, Text[Caret.Line].Length, secondPart);
         }
 
         public bool MoveCaretRight(int n) {
@@ -81,7 +76,7 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         public bool MoveCaretDown(int n) {
-            if (Caret.Line + n >= 0 && Caret.Line + n < Text.Count) {
+            if (Caret.Line + n >= 0 && Caret.Line + n < Text.GetLineCount()) {
                 Caret.Line += n;
 
                 // TODO replace to Mathf from Citrus.
@@ -117,7 +112,7 @@ namespace MonogameTextEditor.TextEditor {
             var pos = (Caret.Line, Caret.Col);
             var line = Text[pos.Line];
             if (line.Length == pos.Col) {
-                return Text.Count == (pos.Line + 1) ? (pos.Line, pos.Col) : (pos.Line + 1, 0);
+                return Text.GetLineCount() == (pos.Line + 1) ? (pos.Line, pos.Col) : (pos.Line + 1, 0);
             }
             while (line.Length > pos.Col && !char.IsWhiteSpace(line[pos.Col])) {
                 pos.Col++;
@@ -146,7 +141,7 @@ namespace MonogameTextEditor.TextEditor {
         }
 
         public string GetCurrentLine() {
-            return Text[Caret.Line] + (Caret.Line + 1 == Text.Count ? "" : "\n");
+            return Text[Caret.Line] + (Caret.Line + 1 == Text.GetLineCount() ? "" : "\n");
         }
     }
 }

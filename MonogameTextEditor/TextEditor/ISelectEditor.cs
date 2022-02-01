@@ -8,7 +8,7 @@ namespace MonogameTextEditor.TextEditor {
         ICaretEditor CaretEditor { get; }
         ICaretPosition StartPosition { get; }
         ICaretPosition EndPosition { get; }
-        List<string> Text { get; }
+        ITextCollection Text { get; }
         bool MoveSelectRight(int n);
         bool MoveSelectDown(int n);
         void Insert(string text);
@@ -36,7 +36,7 @@ namespace MonogameTextEditor.TextEditor {
         public ICaretEditor CaretEditor { get; }
         public ICaretPosition StartPosition { get; } = new DrawableCaret();
         public ICaretPosition EndPosition { get; } = new DrawableCaret();
-        public List<string> Text => CaretEditor.Text;
+        public ITextCollection Text => CaretEditor.Text;
 
         public SelectEditor(ICaretEditor caretEditor) {
             CaretEditor = caretEditor;
@@ -80,18 +80,18 @@ namespace MonogameTextEditor.TextEditor {
             var (firstCaret, secondCaret) = GetSortedCarets();
 
             if (firstCaret.Line == secondCaret.Line) {
-                CaretEditor.TextContainer.Remove(firstCaret.Line, firstCaret.Col, secondCaret.Col - firstCaret.Col);
+                Text.Remove(firstCaret.Line, firstCaret.Col, secondCaret.Col - firstCaret.Col);
             } else {
-                CaretEditor.TextContainer.Remove(firstCaret.Line, firstCaret.Col,
+                Text.Remove(firstCaret.Line, firstCaret.Col,
                     Text[firstCaret.Line].Length - firstCaret.Col);
 
                 for (var i = firstCaret.Line + 1; i < secondCaret.Line; i++) {
-                    CaretEditor.TextContainer.RemoveLine(firstCaret.Line + 1);
+                    Text.RemoveLine(firstCaret.Line + 1);
                 }
 
-                CaretEditor.TextContainer.Remove(firstCaret.Line + 1, 0, secondCaret.Col);
-                CaretEditor.TextContainer.Insert(firstCaret.Line, firstCaret.Col, Text[firstCaret.Line + 1]);
-                CaretEditor.TextContainer.RemoveLine(firstCaret.Line + 1);
+                Text.Remove(firstCaret.Line + 1, 0, secondCaret.Col);
+                Text.Insert(firstCaret.Line, firstCaret.Col, Text[firstCaret.Line + 1]);
+                Text.RemoveLine(firstCaret.Line + 1);
             }
 
             CaretEditor.Caret.AssignFrom(firstCaret);
@@ -193,8 +193,8 @@ namespace MonogameTextEditor.TextEditor {
         public void SelectAll() {
             StartPosition.Line = 0;
             StartPosition.Col = 0;
-            EndPosition.Line = Text.Count - 1;
-            EndPosition.Col = Text.Last().Length;
+            EndPosition.Line = Text.GetLineCount() - 1;
+            EndPosition.Col = Text[EndPosition.Line].Length;
             CaretEditor.Caret.AssignFrom(EndPosition);
         }
 
@@ -226,11 +226,11 @@ namespace MonogameTextEditor.TextEditor {
             else {
                 CaretEditor.MoveCaretToStartOfLine();
                 var pos = CaretEditor.Caret;
-                if (Text.Count == pos.Line + 1) {
-                    CaretEditor.TextContainer.Remove(pos.Line, 0, Text[pos.Line].Length);
+                if (Text.GetLineCount() == pos.Line + 1) {
+                    Text.Remove(pos.Line, 0, Text[pos.Line].Length);
                 }
                 else {
-                    CaretEditor.TextContainer.RemoveLine(pos.Line);
+                    Text.RemoveLine(pos.Line);
                 }
             }
             return res;
