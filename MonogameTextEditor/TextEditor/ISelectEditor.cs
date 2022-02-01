@@ -28,6 +28,8 @@ namespace MonogameTextEditor.TextEditor {
         void MoveCaretToEndOfLine();
         void MoveCaretToStartOfLine();
         string CutSelectedText();
+        void MoveSelectToStartLine();
+        void MoveSelectToEndLine();
     }
 
     public class SelectEditor : ISelectEditor {
@@ -234,7 +236,21 @@ namespace MonogameTextEditor.TextEditor {
             return res;
         }
 
-        private (ICaretPosition firstCaret, ICaretPosition fecondCaret) GetSortedCarets() {
+        public void MoveSelectToStartLine() {
+            if (!HasSelection())
+                StartPosition.AssignFrom(CaretEditor.Caret);
+            CaretEditor.MoveCaretToStartOfLine();
+            EndPosition.AssignFrom(CaretEditor.Caret);
+        }
+
+        public void MoveSelectToEndLine() {
+            if (!HasSelection())
+                StartPosition.AssignFrom(CaretEditor.Caret);
+            CaretEditor.MoveCaretToEndOfLine();
+            EndPosition.AssignFrom(CaretEditor.Caret);
+        }
+
+        private (ICaretPosition firstCaret, ICaretPosition secondCaret) GetSortedCarets() {
             var firstCaret = StartPosition;
             var secondCaret = EndPosition;
 

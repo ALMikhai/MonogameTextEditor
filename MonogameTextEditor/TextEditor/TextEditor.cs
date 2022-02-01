@@ -67,6 +67,8 @@ namespace MonogameTextEditor.TextEditor {
                 if (!string.IsNullOrEmpty(text))
                     Clipboard.SetText(text);
             };
+            CmdObserver.SelectLineStart += selectEditor.MoveSelectToStartLine;
+            CmdObserver.SelectLineEnd += selectEditor.MoveSelectToEndLine;
         }
     }
 }
