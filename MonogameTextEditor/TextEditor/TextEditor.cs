@@ -69,6 +69,10 @@ namespace MonogameTextEditor.TextEditor
 			};
 			CmdObserver.SelectLineStart += selectEditor.MoveSelectToStartLine;
 			CmdObserver.SelectLineEnd += selectEditor.MoveSelectToEndLine;
+			// TODO Write with tangerine functions from WordUtils.
+			// CmdObserver.SelectCurrentWord += selectEditor.SelectWordAtCaretPos;
+			CmdObserver.DeleteWordNext += selectEditor.RemoveWordNext;
+			CmdObserver.DeleteWordPrev += selectEditor.RemoveWordPrev;
 		}
 	}
 }

@@ -75,7 +75,6 @@ namespace MonogameTextEditor.TextEditor
 					return true;
 				}
 			}
-
 			return false;
 		}
 
