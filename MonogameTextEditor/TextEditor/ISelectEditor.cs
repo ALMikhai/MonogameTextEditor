@@ -32,6 +32,8 @@ namespace MonogameTextEditor.TextEditor
 		string CutSelectedText();
 		void MoveSelectToStartLine();
 		void MoveSelectToEndLine();
+		void RemoveWordNext();
+		void RemoveWordPrev();
 	}
 
 	public class SelectEditor : ISelectEditor
@@ -248,6 +250,20 @@ namespace MonogameTextEditor.TextEditor
 				StartPosition.AssignFrom(CaretEditor.Caret);
 			CaretEditor.MoveCaretToEndOfLine();
 			EndPosition.AssignFrom(CaretEditor.Caret);
+		}
+
+		public void RemoveWordNext()
+		{
+			if (!HasSelection())
+				MoveSelectToNextWord();
+			RemoveSelect();
+		}
+
+		public void RemoveWordPrev()
+		{
+			if (!HasSelection())
+				MoveSelectToPrevWord();
+			RemoveSelect();
 		}
 
 		private (ICaretPosition firstCaret, ICaretPosition secondCaret) GetSortedCarets()
