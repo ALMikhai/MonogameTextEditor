@@ -58,24 +58,46 @@ namespace MonogameTextEditor.TextEditor
 			Text.Insert(Caret.Line, Text[Caret.Line].Length, secondPart);
 		}
 
+		// TODO Rewrite it.
 		public bool MoveCaretRight(int n)
 		{
-			if (Caret.Col + n >= 0) {
-				if (Caret.Col + n <= Text[Caret.Line].Length) {
-					Caret.Col += n;
-					return true;
-				}
-				if (MoveCaretDown(1)) {
-					Caret.Col = 0;
-					return true;
-				}
-			} else {
-				if (MoveCaretDown(-1)) {
-					Caret.Col = Text[Caret.Line].Length;
-					return true;
+			var pos = (Caret.Line, Caret.Col);
+			var forward = n > 0;
+			var lineCount = Text.GetLineCount();
+			while (n != 0) {
+				if (forward) {
+					var offset = Text.GetLineLenght(pos.Line) - pos.Col;
+					if (offset < n) {
+						if (lineCount > pos.Line + 1) {
+							pos.Line += 1;
+							pos.Col = 0;
+							n -= offset + 1;
+						} else {
+							return false;
+						}
+					} else {
+						pos.Col += n;
+						n -= n;
+					}
+				} else {
+					var offset = -pos.Col;
+					if (offset > n) {
+						if (0 <= pos.Line - 1) {
+							pos.Line -= 1;
+							pos.Col = Text.GetLineLenght(pos.Line);
+							n -= offset - 1;
+						} else {
+							return false;
+						}
+					} else {
+						pos.Col += n;
+						n -= n;
+					}
 				}
 			}
-			return false;
+			Caret.Line = pos.Line;
+			Caret.Col = pos.Col;
+			return true;
 		}
 
 		public bool MoveCaretDown(int n)
