@@ -180,14 +180,14 @@ namespace MonogameTextEditor.TextEditor
 		public void MoveCaretToNextWord()
 		{
 			if (HasSelection())
-				ClearSelection();
+				MoveCaretRight(1);
 			CaretEditor.MoveCaretToNextWord();
 		}
 
 		public void MoveCaretToPrevWord()
 		{
 			if (HasSelection())
-				ClearSelection();
+				MoveCaretRight(-1);
 			CaretEditor.MoveCaretToPrevWord();
 		}
 
