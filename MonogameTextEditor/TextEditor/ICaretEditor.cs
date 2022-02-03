@@ -44,7 +44,7 @@ namespace MonogameTextEditor.TextEditor
 
 		public void Insert(string s)
 		{
-			var lines = s.Split('\n');
+			var lines = s.Replace("\r\n", "\n").Split('\n');
 			var firstPart = Text[Caret.Line].Substring(0, Caret.Col);
 			var secondPart = Text[Caret.Line].Substring(Caret.Col, Text[Caret.Line].Length - Caret.Col);
 			Text.Remove(Caret.Line, Caret.Col, Text[Caret.Line].Length - Caret.Col);
