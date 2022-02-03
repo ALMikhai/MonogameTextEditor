@@ -94,6 +94,19 @@ namespace TextEditorTests
 		}
 
 		[Test]
+		public void MoveCaretToNextAndPrevLine()
+		{
+			var editor = new CaretEditor();
+			editor.Insert("Hello world!\nHello world!");
+			editor.MoveCaretRight(-16);
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 9);
+			editor.MoveCaretRight(16);
+			Assert.AreEqual(editor.Caret.Line, 1);
+			Assert.AreEqual(editor.Caret.Col, 12);
+		}
+
+		[Test]
 		public void MoveCaretRightAtEndOfLine()
 		{
 			var editor = new CaretEditor();
@@ -180,12 +193,68 @@ namespace TextEditorTests
 		}
 
 		[Test]
+		public void MoveCaretToWord()
+		{
+			var editor = new CaretEditor();
+			editor.Insert("Hello world Hello\nworld Hello world");
+			editor.MoveCaretToPrevWord();
+			Assert.AreEqual(editor.Caret.Line, 1);
+			Assert.AreEqual(editor.Caret.Col, 12);
+			editor.MoveCaretToPrevWord();
+			Assert.AreEqual(editor.Caret.Line, 1);
+			Assert.AreEqual(editor.Caret.Col, 6);
+			editor.MoveCaretToPrevWord();
+			Assert.AreEqual(editor.Caret.Line, 1);
+			Assert.AreEqual(editor.Caret.Col, 0);
+			editor.MoveCaretToPrevWord();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 17);
+			editor.MoveCaretToPrevWord();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 12);
+			editor.MoveCaretToNextWord();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 17);
+			editor.MoveCaretToNextWord();
+			Assert.AreEqual(editor.Caret.Line, 1);
+			Assert.AreEqual(editor.Caret.Col, 0);
+		}
+
+		[Test]
+		public void MoveCaretToStartOfLine()
+		{
+			var editor = new CaretEditor();
+			editor.Insert("Hello world!");
+			editor.MoveCaretToStartOfLine();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 0);
+			editor.MoveCaretToNextWord();
+			editor.MoveCaretToStartOfLine();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 0);
+		}
+
+		[Test]
+		public void MoveCaretToEndOfLine()
+		{
+			var editor = new CaretEditor();
+			editor.Insert("Hello world!");
+			editor.MoveCaretToStartOfLine();
+			editor.MoveCaretToEndOfLine();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 12);
+			editor.MoveCaretToPrevWord();
+			editor.MoveCaretToEndOfLine();
+			Assert.AreEqual(editor.Caret.Line, 0);
+			Assert.AreEqual(editor.Caret.Col, 12);
+		}
+
+		[Test]
 		public void Stress()
 		{
 			var editor = new CaretEditor();
 			var n = 10000000;
 			var rand = new Random();
-
 			for (var i = 0; i < n; i++) {
 				var action = rand.Next() % 8;
 				switch (action) {
