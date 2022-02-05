@@ -28,12 +28,12 @@ namespace MonogameTextEditor.TextEditor
 
 		public void RemoveForward()
 		{
-			var curLineLenght = Text[Caret.Line].Length;
-			if (Caret.Line + 1 < Text.GetLineCount() && Caret.Col == curLineLenght) {
-				var line = Text[Caret.Line + 1];
-				Text.RemoveLine(Caret.Line + 1);
-				Text.Insert(Caret.Line, curLineLenght, line);
-			} else if (Caret.Col < curLineLenght) Text.Remove(Caret.Line, Caret.Col, 1);
+			try {
+				Text.Remove(Caret.Line, Caret.Col, 1);
+			} catch (ArgumentException e) {
+				if (e.Message != "The length of the remove is greater than the length of the text")
+					throw;
+			}
 		}
 
 		public void RemoveBackward()
@@ -44,18 +44,9 @@ namespace MonogameTextEditor.TextEditor
 
 		public void Insert(string s)
 		{
-			var lines = s.Replace("\r\n", "\n").Split('\n');
-			var firstPart = Text[Caret.Line].Substring(0, Caret.Col);
-			var secondPart = Text[Caret.Line].Substring(Caret.Col, Text[Caret.Line].Length - Caret.Col);
-			Text.Remove(Caret.Line, Caret.Col, Text[Caret.Line].Length - Caret.Col);
-			Text.Insert(Caret.Line, firstPart.Length, lines[0]);
-			for (var i = 1; i < lines.Length; i++) {
-				var line = lines[i];
-				Caret.Line++;
-				Text.InsertLine(Caret.Line, line);
-			}
-			Caret.Col = Text[Caret.Line].Length;
-			Text.Insert(Caret.Line, Text[Caret.Line].Length, secondPart);
+			var (newLine, newCol) = Text.Insert(Caret.Line, Caret.Col, s);
+			Caret.Col = newCol;
+			Caret.Line = newLine;
 		}
 
 		// TODO Rewrite it.
