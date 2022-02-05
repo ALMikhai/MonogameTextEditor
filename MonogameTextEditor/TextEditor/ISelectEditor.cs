@@ -82,17 +82,7 @@ namespace MonogameTextEditor.TextEditor
 			if (!HasSelection())
 				return;
 			var (firstCaret, secondCaret) = GetSortedCarets();
-			if (firstCaret.Line == secondCaret.Line)
-				Text.Remove(firstCaret.Line, firstCaret.Col, secondCaret.Col - firstCaret.Col);
-			else {
-				Text.Remove(firstCaret.Line, firstCaret.Col,
-					Text[firstCaret.Line].Length - firstCaret.Col);
-				for (var i = firstCaret.Line + 1; i < secondCaret.Line; i++)
-					Text.RemoveLine(firstCaret.Line + 1);
-				Text.Remove(firstCaret.Line + 1, 0, secondCaret.Col);
-				Text.Insert(firstCaret.Line, firstCaret.Col, Text[firstCaret.Line + 1]);
-				Text.RemoveLine(firstCaret.Line + 1);
-			}
+			Text.RemoveRange((firstCaret.Line, firstCaret.Col), (secondCaret.Line, secondCaret.Col));
 			CaretEditor.Caret.AssignFrom(firstCaret);
 			ClearSelection();
 		}
@@ -148,17 +138,8 @@ namespace MonogameTextEditor.TextEditor
 		{
 			if (!HasSelection())
 				return CaretEditor.GetCurrentLine();
-			var res = new StringBuilder();
 			var (firstCaret, secondCaret) = GetSortedCarets();
-			if (firstCaret.Line == secondCaret.Line)
-				res.Append(Text[firstCaret.Line][firstCaret.Col..secondCaret.Col]);
-			else {
-				res.AppendLine(Text[firstCaret.Line][firstCaret.Col..Text[firstCaret.Line].Length]);
-				for (var i = firstCaret.Line + 1; i < secondCaret.Line; i++)
-					res.AppendLine(Text[i]);
-				res.Append(Text[secondCaret.Line][0..secondCaret.Col]);
-			}
-			return res.ToString();
+			return Text.GetTextRange((firstCaret.Line, firstCaret.Col), (secondCaret.Line, secondCaret.Col));
 		}
 
 		public void MoveSelectToNextWord()
