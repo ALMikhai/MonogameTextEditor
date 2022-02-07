@@ -86,6 +86,12 @@ namespace MonogameTextEditor.TextEditor
 							case Keys.Delete:
 								DeleteWordNext?.Invoke();
 								break;
+							case Keys.Z:
+								Undo?.Invoke();
+								break;
+							case Keys.Y:
+								Redo?.Invoke();
+								break;
 						}
 				} else if (pressedKeys.Contains(Keys.LeftShift)) {
 					if (oldKeyboardState.IsKeyUp(key))
