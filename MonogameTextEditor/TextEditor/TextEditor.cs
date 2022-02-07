@@ -73,6 +73,8 @@ namespace MonogameTextEditor.TextEditor
 			// CmdObserver.SelectCurrentWord += selectEditor.SelectWordAtCaretPos;
 			CmdObserver.DeleteWordNext += selectEditor.RemoveWordNext;
 			CmdObserver.DeleteWordPrev += selectEditor.RemoveWordPrev;
+			CmdObserver.Undo += selectEditor.Undo;
+			CmdObserver.Redo += selectEditor.Redo;
 		}
 	}
 }

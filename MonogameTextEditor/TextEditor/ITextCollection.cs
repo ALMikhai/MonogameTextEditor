@@ -16,6 +16,7 @@ namespace MonogameTextEditor.TextEditor
 		int GetLineLenght(int line);
 		int GetLineCount();
 		string this[int line] => GetLine(line);
+		char GetSymbol(int line, int col);
 	}
 
 	// TODO Maybe need to make own exception class to avoid misunderstandings.
@@ -125,6 +126,13 @@ namespace MonogameTextEditor.TextEditor
 		public int GetLineCount()
 		{
 			return text.Count;
+		}
+
+		public char GetSymbol(int line, int col)
+		{
+			if (!IsValidPosition((line, col)))
+				throw new ArgumentException("Position is not valid");
+			return text[line].Length == col ? '\n' : text[line][col];
 		}
 
 		public void InsertLine(int line, string text)
