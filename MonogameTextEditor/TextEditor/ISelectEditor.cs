@@ -311,8 +311,7 @@ namespace MonogameTextEditor.TextEditor
 					ClearSelection();
 					CaretEditor.Caret.Line = line;
 					CaretEditor.Caret.Col = col;
-					// TODO Fix problem with \r (maybe remove anywhere).
-					Text.Remove(line, col, text.Replace("\r\n", "\n").Length);
+					Text.Remove(line, col, text.Length);
 				});
 		}
 

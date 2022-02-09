@@ -126,7 +126,7 @@ namespace TextEditorTests
 			editor.MoveCaretRight(2);
 			editor.Insert("\nHello\nHello");
 			editor.MoveSelectDown(-2);
-			Assert.AreEqual(editor.GetSelectedText(), " world!\r\nHello\r\nHello");
+			Assert.AreEqual(editor.GetSelectedText(), " world!\nHello\nHello");
 			editor.ClearSelection();
 			Assert.AreEqual(editor.GetSelectedText(), "Hello world!\n");
 		}
@@ -167,7 +167,7 @@ namespace TextEditorTests
 			var editor = new SelectEditor(new CaretEditor());
 			editor.Insert("Hello world Hello\nworld Hello world");
 			editor.SelectAll();
-			Assert.AreEqual(editor.GetSelectedText(), "Hello world Hello\r\nworld Hello world");
+			Assert.AreEqual(editor.GetSelectedText(), "Hello world Hello\nworld Hello world");
 			editor.RemoveSelect();
 			Assert.AreEqual(editor.Text.ToString(), "");
 		}
@@ -225,13 +225,13 @@ namespace TextEditorTests
 			editor.MoveSelectRight(-1);
 			editor.MoveSelectToPrevWord();
 			editor.MoveSelectToStartLine();
-			Assert.AreEqual(editor.GetSelectedText(), "Hello world Hello\r\nworld Hello world");
+			Assert.AreEqual(editor.GetSelectedText(), "Hello world Hello\nworld Hello world");
 			Assert.AreEqual(editor.EndPosition.Line, 0);
 			Assert.AreEqual(editor.EndPosition.Col, 0);
 			Assert.AreEqual(editor.StartPosition.Line, 1);
 			Assert.AreEqual(editor.StartPosition.Col, 17);
 			editor.MoveSelectToEndLine();
-			Assert.AreEqual(editor.GetSelectedText(), "\r\nworld Hello world");
+			Assert.AreEqual(editor.GetSelectedText(), "\nworld Hello world");
 			Assert.AreEqual(editor.EndPosition.Line, 0);
 			Assert.AreEqual(editor.EndPosition.Col, 17);
 			Assert.AreEqual(editor.StartPosition.Line, 1);
@@ -264,11 +264,11 @@ namespace TextEditorTests
 			editor.MoveSelectToStartLine();
 			editor.MoveSelectRight(-4);
 			var text = editor.CutSelectedText();
-			Assert.AreEqual(text, "ld!\r\nHello world!");
+			Assert.AreEqual(text, "ld!\nHello world!");
 			Assert.IsFalse(editor.HasSelection());
 			Assert.AreEqual(editor.Text.ToString(), "Hello wor");
 			editor.Insert(text);
-			Assert.AreEqual(editor.Text.ToString(), "Hello world!\r\nHello world!");
+			Assert.AreEqual(editor.Text.ToString(), "Hello world!\nHello world!");
 			text = editor.CutSelectedText();
 			Assert.AreEqual(text, "Hello world!");
 			Assert.AreEqual(editor.CaretEditor.Caret.Line, 1);
@@ -290,10 +290,10 @@ namespace TextEditorTests
 			editor.Insert("Hello world!\nHello world!");
 			editor.MoveCaretRight(-1);
 			editor.RemoveWordPrev();
-			Assert.AreEqual(editor.Text.ToString(), "Hello world!\r\nHello !");
+			Assert.AreEqual(editor.Text.ToString(), "Hello world!\nHello !");
 			editor.MoveCaretRight(-2);
 			editor.RemoveWordNext();
-			Assert.AreEqual(editor.Text.ToString(), "Hello world!\r\nHell!");
+			Assert.AreEqual(editor.Text.ToString(), "Hello world!\nHell!");
 			editor.MoveCaretDown(-1);
 			editor.RemoveWordNext();
 			editor.RemoveWordNext();
@@ -308,7 +308,7 @@ namespace TextEditorTests
 			editor.Insert("Hello world!\nHello world!");
 			editor.MoveSelectToPrevWord();
 			editor.RemoveWordPrev();
-			Assert.AreEqual(editor.Text.ToString(), "Hello world!\r\nHello ");
+			Assert.AreEqual(editor.Text.ToString(), "Hello world!\nHello ");
 			editor.MoveSelectDown(-1);
 			editor.RemoveWordNext();
 			Assert.AreEqual(editor.Text.ToString(), "Hello ");

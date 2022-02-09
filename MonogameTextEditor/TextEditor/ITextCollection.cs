@@ -101,9 +101,12 @@ namespace MonogameTextEditor.TextEditor
 			if (first.Line == second.Line)
 				res.Append(text[first.Line][first.Col..second.Col]);
 			else {
-				res.AppendLine(text[first.Line][first.Col..text[first.Line].Length]);
-				for (var i = first.Line + 1; i < second.Line; i++)
-					res.AppendLine(text[i]);
+				res.Append(text[first.Line][first.Col..text[first.Line].Length]);
+				res.Append('\n');
+				for (var i = first.Line + 1; i < second.Line; i++) {
+					res.Append(text[i]);
+					res.Append('\n');
+				}
 				res.Append(text[second.Line][..second.Col]);
 			}
 			return res.ToString();
@@ -152,10 +155,9 @@ namespace MonogameTextEditor.TextEditor
 				for (var i = 0; i < text.Count; i++) {
 					var line = text[i];
 					var isLastLine = i == text.Count - 1;
-					if (isLastLine)
-						builder.Append(line);
-					else
-						builder.AppendLine(line);
+					builder.Append(line);
+					if (!isLastLine)
+						builder.Append('\n');
 				}
 				cachedString = builder.ToString();
 				textUpdated = false;

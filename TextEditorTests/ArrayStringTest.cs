@@ -27,7 +27,7 @@ namespace TextEditorTests
 			var text = new ArrayStringText();
 			text.Insert(0, 0, "Hello world!");
 			text.InsertLine(1, "123");
-			Assert.AreEqual(text.ToString(), "Hello world!\r\n123");
+			Assert.AreEqual(text.ToString(), "Hello world!\n123");
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace TextEditorTests
 			text.InsertLine(1, "123");
 			text.InsertLine(1, "321");
 			text.RemoveLine(0);
-			Assert.AreEqual(text.ToString(), "321\r\n123");
+			Assert.AreEqual(text.ToString(), "321\n123");
 		}
 	}
 }
