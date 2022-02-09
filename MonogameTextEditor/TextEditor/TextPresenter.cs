@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonogameTextEditor.TextEditor.CaretEditor;
 
 namespace MonogameTextEditor.TextEditor
 {

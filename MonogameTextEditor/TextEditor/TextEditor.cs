@@ -1,4 +1,6 @@
 using System.Windows.Forms;
+using MonogameTextEditor.TextEditor.CaretEditor;
+using MonogameTextEditor.TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {
@@ -25,8 +27,8 @@ namespace MonogameTextEditor.TextEditor
 			CmdObserver.Paste += () => caretEditor.Insert(Clipboard.GetText());
 			CmdObserver.MoveWordNext += caretEditor.MoveCaretToNextWord;
 			CmdObserver.MoveWordPrev += caretEditor.MoveCaretToPrevWord;
-			CmdObserver.MoveLineStart += caretEditor.MoveCaretToStartOfLine;
-			CmdObserver.MoveLineEnd += caretEditor.MoveCaretToEndOfLine;
+			CmdObserver.MoveLineStart += caretEditor.MoveCaretToLineStart;
+			CmdObserver.MoveLineEnd += caretEditor.MoveCaretToLineEnd;
 		}
 	}
 
@@ -51,28 +53,28 @@ namespace MonogameTextEditor.TextEditor
 					Clipboard.SetText(text);
 			};
 			CmdObserver.Paste += () => selectEditor.Insert(Clipboard.GetText());
-			CmdObserver.SelectCharNext += () => selectEditor.MoveSelectRight(1);
-			CmdObserver.SelectCharPrev += () => selectEditor.MoveSelectRight(-1);
-			CmdObserver.SelectLineNext += () => selectEditor.MoveSelectDown(1);
-			CmdObserver.SelectLinePrev += () => selectEditor.MoveSelectDown(-1);
+			CmdObserver.SelectCharNext += () => selectEditor.MoveSelectionRight(1);
+			CmdObserver.SelectCharPrev += () => selectEditor.MoveSelectionRight(-1);
+			CmdObserver.SelectLineNext += () => selectEditor.MoveSelectionDown(1);
+			CmdObserver.SelectLinePrev += () => selectEditor.MoveSelectionDown(-1);
 			CmdObserver.MoveWordNext += selectEditor.MoveCaretToNextWord;
 			CmdObserver.MoveWordPrev += selectEditor.MoveCaretToPrevWord;
-			CmdObserver.SelectWordNext += selectEditor.MoveSelectToNextWord;
-			CmdObserver.SelectWordPrev += selectEditor.MoveSelectToPrevWord;
+			CmdObserver.SelectWordNext += selectEditor.MoveSelectionToNextWord;
+			CmdObserver.SelectWordPrev += selectEditor.MoveSelectionToPrevWord;
 			CmdObserver.SelectAll += selectEditor.SelectAll;
-			CmdObserver.MoveLineStart += selectEditor.MoveCaretToStartOfLine;
-			CmdObserver.MoveLineEnd += selectEditor.MoveCaretToEndOfLine;
+			CmdObserver.MoveLineStart += selectEditor.MoveCaretToLineStart;
+			CmdObserver.MoveLineEnd += selectEditor.MoveCaretToLineEnd;
 			CmdObserver.Cut += () => {
-				var text = selectEditor.CutSelectedText();
+				var text = selectEditor.Cut();
 				if (!string.IsNullOrEmpty(text))
 					Clipboard.SetText(text);
 			};
-			CmdObserver.SelectLineStart += selectEditor.MoveSelectToStartLine;
-			CmdObserver.SelectLineEnd += selectEditor.MoveSelectToEndLine;
+			CmdObserver.SelectLineStart += selectEditor.MoveSelectionToLineStart;
+			CmdObserver.SelectLineEnd += selectEditor.MoveSelectionToLineEnd;
 			// TODO Write with tangerine functions from WordUtils.
 			// CmdObserver.SelectCurrentWord += selectEditor.SelectWordAtCaretPos;
-			CmdObserver.DeleteWordNext += selectEditor.RemoveWordNext;
-			CmdObserver.DeleteWordPrev += selectEditor.RemoveWordPrev;
+			CmdObserver.DeleteWordNext += selectEditor.RemoveNextWord;
+			CmdObserver.DeleteWordPrev += selectEditor.RemovePrevWord;
 			CmdObserver.Undo += selectEditor.Undo;
 			CmdObserver.Redo += selectEditor.Redo;
 		}

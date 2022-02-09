@@ -1,30 +1,14 @@
 using System;
-using System.Collections.Generic;
+using MonogameTextEditor.TextEditor.Caret;
+using MonogameTextEditor.TextEditor.TextCollection;
 
-namespace MonogameTextEditor.TextEditor
+namespace MonogameTextEditor.TextEditor.CaretEditor
 {
-	public interface ICaretEditor
-	{
-		ICaretPosition Caret { get; }
-		ITextCollection Text { get; }
-		void RemoveForward();
-		void RemoveBackward();
-		void Insert(string s);
-		bool MoveCaretRight(int n);
-		bool MoveCaretDown(int n);
-		string GetCurrentLine();
-		(int Line, int Col) GetNextWordPos();
-		(int Line, int Col) GetPrevWordPos();
-		void MoveCaretToNextWord();
-		void MoveCaretToPrevWord();
-		void MoveCaretToEndOfLine();
-		void MoveCaretToStartOfLine();
-	}
-
 	public class CaretEditor : ICaretEditor
 	{
-		public ICaretPosition Caret { get; } = new DrawableCaret();
-		public ITextCollection Text { get; } = new ArrayStringText();
+		public ICaret Caret { get; } = new Caret.Caret();
+
+		public ITextCollection Text { get; } = new ArrayString();
 
 		public void RemoveForward()
 		{
@@ -95,7 +79,6 @@ namespace MonogameTextEditor.TextEditor
 		{
 			if (Caret.Line + n >= 0 && Caret.Line + n < Text.GetLineCount()) {
 				Caret.Line += n;
-				// TODO replace to Mathf from Citrus.
 				Caret.Col = Math.Min(Caret.Col, Text[Caret.Line].Length);
 				return true;
 			}
@@ -116,15 +99,9 @@ namespace MonogameTextEditor.TextEditor
 			Caret.Line = pos.Line;
 		}
 
-		public void MoveCaretToEndOfLine()
-		{
-			Caret.Col = Text[Caret.Line].Length;
-		}
+		public void MoveCaretToLineEnd() => Caret.Col = Text[Caret.Line].Length;
 
-		public void MoveCaretToStartOfLine()
-		{
-			Caret.Col = 0;
-		}
+		public void MoveCaretToLineStart() => Caret.Col = 0;
 
 		public (int Line, int Col) GetNextWordPos()
 		{
@@ -152,9 +129,6 @@ namespace MonogameTextEditor.TextEditor
 			return pos;
 		}
 
-		public string GetCurrentLine()
-		{
-			return Text[Caret.Line] + (Caret.Line + 1 == Text.GetLineCount() ? "" : "\n");
-		}
+		public string GetCurrentLine() => Text[Caret.Line] + (Caret.Line + 1 == Text.GetLineCount() ? "" : "\n");
 	}
 }

@@ -2,25 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonogameTextEditor.TextEditor
+namespace MonogameTextEditor.TextEditor.TextCollection
 {
-	public interface ITextCollection
-	{
-		(int NewLine, int NewCol) Insert(int line, int col, string text);
-		void Remove(int line, int col, int lenght);
-		void InsertLine(int line, string text);
-		void RemoveLine(int line);
-		public void RemoveRange((int Line, int Col) first, (int Line, int Col) second);
-		string GetLine(int line);
-		string GetTextRange((int Line, int Col) first, (int Line, int Col) second);
-		int GetLineLenght(int line);
-		int GetLineCount();
-		string this[int line] => GetLine(line);
-		char GetSymbol(int line, int col);
-	}
-
 	// TODO Maybe need to make own exception class to avoid misunderstandings.
-	public class ArrayStringText : ITextCollection
+	public class ArrayString : ITextCollection
 	{
 		private readonly List<string> text = new List<string> { "" };
 		private string cachedString = "";
@@ -76,38 +61,38 @@ namespace MonogameTextEditor.TextEditor
 			textUpdated = true;
 		}
 
-		public void RemoveRange((int Line, int Col) first, (int Line, int Col) second)
+		public void RemoveRange((int Line, int Col) left, (int Line, int Col) right)
 		{
-			if (!IsValidPosition(first) || !IsValidPosition(second))
+			if (!IsValidPosition(left) || !IsValidPosition(right))
 				throw new IndexOutOfRangeException("Remove range go beyond text size");
-			if (first.Line == second.Line)
-				text[first.Line] = text[first.Line].Remove(first.Col, second.Col - first.Col);
+			if (left.Line == right.Line)
+				text[left.Line] = text[left.Line].Remove(left.Col, right.Col - left.Col);
 			else {
-				text[first.Line] = text[first.Line].Remove(first.Col, text[first.Line].Length - first.Col);
-				for (var i = first.Line + 1; i < second.Line; i++)
-					RemoveLine(first.Line + 1);
-				text[first.Line + 1] = text[first.Line + 1].Remove(0, second.Col);
-				Insert(first.Line, first.Col, text[first.Line + 1]);
-				RemoveLine(first.Line + 1);
+				text[left.Line] = text[left.Line].Remove(left.Col, text[left.Line].Length - left.Col);
+				for (var i = left.Line + 1; i < right.Line; i++)
+					RemoveLine(left.Line + 1);
+				text[left.Line + 1] = text[left.Line + 1].Remove(0, right.Col);
+				Insert(left.Line, left.Col, text[left.Line + 1]);
+				RemoveLine(left.Line + 1);
 			}
 			textUpdated = true;
 		}
 
-		public string GetTextRange((int Line, int Col) first, (int Line, int Col) second)
+		public string GetTextRange((int Line, int Col) left, (int Line, int Col) right)
 		{
-			if (!IsValidPosition(first) || !IsValidPosition(second))
+			if (!IsValidPosition(left) || !IsValidPosition(right))
 				throw new IndexOutOfRangeException("Range go beyond text size");
 			var res = new StringBuilder();
-			if (first.Line == second.Line)
-				res.Append(text[first.Line][first.Col..second.Col]);
+			if (left.Line == right.Line)
+				res.Append(text[left.Line][left.Col..right.Col]);
 			else {
-				res.Append(text[first.Line][first.Col..text[first.Line].Length]);
+				res.Append(text[left.Line][left.Col..text[left.Line].Length]);
 				res.Append('\n');
-				for (var i = first.Line + 1; i < second.Line; i++) {
+				for (var i = left.Line + 1; i < right.Line; i++) {
 					res.Append(text[i]);
 					res.Append('\n');
 				}
-				res.Append(text[second.Line][..second.Col]);
+				res.Append(text[right.Line][..right.Col]);
 			}
 			return res.ToString();
 		}
@@ -126,10 +111,7 @@ namespace MonogameTextEditor.TextEditor
 			return text[line].Length;
 		}
 
-		public int GetLineCount()
-		{
-			return text.Count;
-		}
+		public int GetLineCount() => text.Count;
 
 		public char GetSymbol(int line, int col)
 		{
@@ -165,9 +147,7 @@ namespace MonogameTextEditor.TextEditor
 			return cachedString;
 		}
 
-		private bool IsValidPosition((int Line, int Col) pos)
-		{
-			return pos.Line >= 0 && pos.Col >= 0 && pos.Line < text.Count && pos.Col <= text[pos.Line].Length;
-		}
+		private bool IsValidPosition((int Line, int Col) pos) => pos.Line >= 0 && pos.Col >= 0 &&
+			pos.Line < text.Count && pos.Col <= text[pos.Line].Length;
 	}
 }

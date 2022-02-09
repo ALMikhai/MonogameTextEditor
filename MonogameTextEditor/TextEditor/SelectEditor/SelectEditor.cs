@@ -1,44 +1,20 @@
-namespace MonogameTextEditor.TextEditor
-{
-	public interface ISelectEditor
-	{
-		ICaretEditor CaretEditor { get; }
-		ICaretPosition StartPosition { get; }
-		ICaretPosition EndPosition { get; }
-		ITextCollection Text { get; }
-		bool MoveSelectRight(int n);
-		bool MoveSelectDown(int n);
-		void Insert(string text);
-		void RemoveSelect();
-		void ClearSelection();
-		bool HasSelection();
-		void RemoveForward();
-		void RemoveBackward();
-		bool MoveCaretRight(int n);
-		bool MoveCaretDown(int n);
-		string GetSelectedText();
-		void MoveSelectToNextWord();
-		void MoveSelectToPrevWord();
-		void MoveCaretToNextWord();
-		void MoveCaretToPrevWord();
-		void SelectAll();
-		void MoveCaretToEndOfLine();
-		void MoveCaretToStartOfLine();
-		string CutSelectedText();
-		void MoveSelectToStartLine();
-		void MoveSelectToEndLine();
-		void RemoveWordNext();
-		void RemoveWordPrev();
-		void Undo();
-		void Redo();
-	}
+using MonogameTextEditor.TextEditor.Caret;
+using MonogameTextEditor.TextEditor.CaretEditor;
+using MonogameTextEditor.TextEditor.TextCollection;
+using MonogameTextEditor.TextEditor.UndoSystem;
 
+namespace MonogameTextEditor.TextEditor.SelectEditor
+{
 	public class SelectEditor : ISelectEditor
 	{
 		public ICaretEditor CaretEditor { get; }
-		public ICaretPosition StartPosition { get; } = new DrawableCaret();
-		public ICaretPosition EndPosition { get; } = new DrawableCaret();
+
+		public ICaret SelectionStart { get; } = new Caret.Caret();
+
+		public ICaret SelectionEnd { get; } = new Caret.Caret();
+
 		public ITextCollection Text => CaretEditor.Text;
+
 
 		private readonly UndoStack undoStack = new UndoStack();
 
@@ -47,23 +23,23 @@ namespace MonogameTextEditor.TextEditor
 			CaretEditor = caretEditor;
 		}
 
-		public bool MoveSelectRight(int n)
+		public bool MoveSelectionRight(int n)
 		{
 			if (!HasSelection())
 				ClearSelection();
 			if (CaretEditor.MoveCaretRight(n)) {
-				EndPosition.AssignFrom(CaretEditor.Caret);
+				SelectionEnd.AssignFrom(CaretEditor.Caret);
 				return true;
 			}
 			return false;
 		}
 
-		public bool MoveSelectDown(int n)
+		public bool MoveSelectionDown(int n)
 		{
 			if (!HasSelection())
 				ClearSelection();
 			if (CaretEditor.MoveCaretDown(n)) {
-				EndPosition.AssignFrom(CaretEditor.Caret);
+				SelectionEnd.AssignFrom(CaretEditor.Caret);
 				return true;
 			}
 			return false;
@@ -85,7 +61,7 @@ namespace MonogameTextEditor.TextEditor
 			undoStack.Add(undoItem);
 		}
 
-		public void RemoveSelect()
+		public void RemoveSelection()
 		{
 			if (!HasSelection())
 				return;
@@ -94,19 +70,16 @@ namespace MonogameTextEditor.TextEditor
 
 		public void ClearSelection()
 		{
-			StartPosition.AssignFrom(CaretEditor.Caret);
-			EndPosition.AssignFrom(CaretEditor.Caret);
+			SelectionStart.AssignFrom(CaretEditor.Caret);
+			SelectionEnd.AssignFrom(CaretEditor.Caret);
 		}
 
-		public bool HasSelection()
-		{
-			return !StartPosition.Equals(EndPosition);
-		}
+		public bool HasSelection() => !SelectionStart.Equals(SelectionEnd);
 
 		public void RemoveForward()
 		{
 			if (HasSelection()) {
-				RemoveSelect();
+				RemoveSelection();
 				return;
 			}
 			if (!MoveCaretRight(1))
@@ -120,7 +93,7 @@ namespace MonogameTextEditor.TextEditor
 		public void RemoveBackward()
 		{
 			if (HasSelection()) {
-				RemoveSelect();
+				RemoveSelection();
 				return;
 			}
 			if (!MoveCaretRight(-1))
@@ -159,20 +132,20 @@ namespace MonogameTextEditor.TextEditor
 			return Text.GetTextRange((firstCaret.Line, firstCaret.Col), (secondCaret.Line, secondCaret.Col));
 		}
 
-		public void MoveSelectToNextWord()
+		public void MoveSelectionToNextWord()
 		{
 			if (!HasSelection())
 				ClearSelection();
 			CaretEditor.MoveCaretToNextWord();
-			EndPosition.AssignFrom(CaretEditor.Caret);
+			SelectionEnd.AssignFrom(CaretEditor.Caret);
 		}
 
-		public void MoveSelectToPrevWord()
+		public void MoveSelectionToPrevWord()
 		{
 			if (!HasSelection())
 				ClearSelection();
 			CaretEditor.MoveCaretToPrevWord();
-			EndPosition.AssignFrom(CaretEditor.Caret);
+			SelectionEnd.AssignFrom(CaretEditor.Caret);
 		}
 
 		public void MoveCaretToNextWord()
@@ -191,71 +164,71 @@ namespace MonogameTextEditor.TextEditor
 
 		public void SelectAll()
 		{
-			StartPosition.Line = 0;
-			StartPosition.Col = 0;
-			EndPosition.Line = Text.GetLineCount() - 1;
-			EndPosition.Col = Text[EndPosition.Line].Length;
-			CaretEditor.Caret.AssignFrom(EndPosition);
+			SelectionStart.Line = 0;
+			SelectionStart.Col = 0;
+			SelectionEnd.Line = Text.GetLineCount() - 1;
+			SelectionEnd.Col = Text[SelectionEnd.Line].Length;
+			CaretEditor.Caret.AssignFrom(SelectionEnd);
 		}
 
-		public void MoveCaretToEndOfLine()
+		public void MoveCaretToLineEnd()
 		{
 			if (HasSelection()) {
 				var (_, secondCaret) = GetSortedCarets();
 				CaretEditor.Caret.AssignFrom(secondCaret);
 				ClearSelection();
 			}
-			CaretEditor.MoveCaretToEndOfLine();
+			CaretEditor.MoveCaretToLineEnd();
 		}
 
-		public void MoveCaretToStartOfLine()
+		public void MoveCaretToLineStart()
 		{
 			if (HasSelection()) {
 				var (firstCaret, _) = GetSortedCarets();
 				CaretEditor.Caret.AssignFrom(firstCaret);
 				ClearSelection();
 			}
-			CaretEditor.MoveCaretToStartOfLine();
+			CaretEditor.MoveCaretToLineStart();
 		}
 
-		public string CutSelectedText()
+		public string Cut()
 		{
 			var res = GetSelectedText();
 			if (!HasSelection()) {
 				var caretPos = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
-				CaretEditor.MoveCaretToStartOfLine();
+				CaretEditor.MoveCaretToLineStart();
 				var startPos = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
-				MoveCaretToEndOfLine();
+				MoveCaretToLineEnd();
 				if (Text.GetLineCount() > CaretEditor.Caret.Line + 1)
-					MoveSelectRight(1);
+					MoveSelectionRight(1);
 				var endPos = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
 				if (startPos.Line != endPos.Line || startPos.Col != endPos.Col)
 					undoStack.Do(GetRemoveRangeUndoItem(startPos, endPos, caretPos));
 			} else
-				RemoveSelect();
+				RemoveSelection();
 			return res;
 		}
 
-		public void MoveSelectToStartLine()
+		public void MoveSelectionToLineStart()
 		{
 			if (!HasSelection())
-				StartPosition.AssignFrom(CaretEditor.Caret);
-			CaretEditor.MoveCaretToStartOfLine();
-			EndPosition.AssignFrom(CaretEditor.Caret);
+				SelectionStart.AssignFrom(CaretEditor.Caret);
+			CaretEditor.MoveCaretToLineStart();
+			SelectionEnd.AssignFrom(CaretEditor.Caret);
 		}
 
-		public void MoveSelectToEndLine()
+		public void MoveSelectionToLineEnd()
 		{
 			if (!HasSelection())
-				StartPosition.AssignFrom(CaretEditor.Caret);
-			CaretEditor.MoveCaretToEndOfLine();
-			EndPosition.AssignFrom(CaretEditor.Caret);
+				SelectionStart.AssignFrom(CaretEditor.Caret);
+			CaretEditor.MoveCaretToLineEnd();
+			SelectionEnd.AssignFrom(CaretEditor.Caret);
 		}
 
-		public void RemoveWordNext()
+		public void RemoveNextWord()
 		{
 			if (HasSelection()) {
-				RemoveSelect();
+				RemoveSelection();
 				return;
 			}
 			var startPos = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
@@ -265,10 +238,10 @@ namespace MonogameTextEditor.TextEditor
 				undoStack.Do(GetRemoveRangeUndoItem(startPos, endPos, startPos));
 		}
 
-		public void RemoveWordPrev()
+		public void RemovePrevWord()
 		{
 			if (HasSelection()) {
-				RemoveSelect();
+				RemoveSelection();
 				return;
 			}
 			var endPos = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
@@ -278,21 +251,15 @@ namespace MonogameTextEditor.TextEditor
 				undoStack.Do(GetRemoveRangeUndoItem(startPos, endPos, endPos));
 		}
 
-		public void Undo()
-		{
-			undoStack.Undo();
-		}
+		public void Undo() => undoStack.Undo();
 
-		public void Redo()
-		{
-			undoStack.Redo();
-		}
+		public void Redo() => undoStack.Redo();
 
-		private (ICaretPosition firstCaret, ICaretPosition secondCaret) GetSortedCarets()
+		private (ICaret firstCaret, ICaret secondCaret) GetSortedCarets()
 		{
-			var firstCaret = StartPosition;
-			var secondCaret = EndPosition;
-			if (firstCaret > secondCaret)
+			var firstCaret = SelectionStart;
+			var secondCaret = SelectionEnd;
+			if (firstCaret.CompareTo(secondCaret) > 0)
 				(firstCaret, secondCaret) = (secondCaret, firstCaret);
 			return (firstCaret, secondCaret);
 		}
@@ -300,7 +267,7 @@ namespace MonogameTextEditor.TextEditor
 		private IUndoItem GetInsertUndoItem(string text)
 		{
 			var (line, col) = (CaretEditor.Caret.Line, CaretEditor.Caret.Col);
-			return new SingleUndoItem(
+			return new UndoItem(
 				() => {
 					ClearSelection();
 					CaretEditor.Caret.Line = line;
@@ -317,35 +284,35 @@ namespace MonogameTextEditor.TextEditor
 
 		private IUndoItem GetRemoveSelectUndoItem()
 		{
-			var selectPositions = (StartPosition.Line, StartPosition.Col, EndPosition.Line, EndPosition.Col);
+			var selectPositions = (SelectionStart.Line, SelectionStart.Col, SelectionEnd.Line, SelectionEnd.Col);
 			var selectedText = GetSelectedText();
 			var (firstCaret, secondCaret) = GetSortedCarets();
-			return new SingleUndoItem(
+			return new UndoItem(
 				() => {
-					StartPosition.Line = selectPositions.Item1;
-					StartPosition.Col = selectPositions.Item2;
-					EndPosition.Line = selectPositions.Item3;
-					EndPosition.Col = selectPositions.Item4;
+					SelectionStart.Line = selectPositions.Item1;
+					SelectionStart.Col = selectPositions.Item2;
+					SelectionEnd.Line = selectPositions.Item3;
+					SelectionEnd.Col = selectPositions.Item4;
 					Text.RemoveRange((firstCaret.Line, firstCaret.Col), (secondCaret.Line, secondCaret.Col));
 					CaretEditor.Caret.AssignFrom(firstCaret);
 					ClearSelection();
 				},
 				() => {
 					ClearSelection();
-					StartPosition.Line = selectPositions.Item1;
-					StartPosition.Col = selectPositions.Item2;
-					EndPosition.Line = selectPositions.Item3;
-					EndPosition.Col = selectPositions.Item4;
+					SelectionStart.Line = selectPositions.Item1;
+					SelectionStart.Col = selectPositions.Item2;
+					SelectionEnd.Line = selectPositions.Item3;
+					SelectionEnd.Col = selectPositions.Item4;
 					CaretEditor.Caret.AssignFrom(firstCaret);
 					CaretEditor.Insert(selectedText);
-					CaretEditor.Caret.AssignFrom(EndPosition);
+					CaretEditor.Caret.AssignFrom(SelectionEnd);
 				});
 		}
 
 		private IUndoItem GetRemoveRangeUndoItem((int Line, int Col) first, (int Line, int Col) second, (int Line, int Col) undoCaretPos)
 		{
 			var text = Text.GetTextRange(first, second);
-			return new SingleUndoItem(
+			return new UndoItem(
 				() => {
 					ClearSelection();
 					CaretEditor.Caret.Line = first.Line;

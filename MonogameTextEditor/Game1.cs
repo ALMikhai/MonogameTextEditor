@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameTextEditor.TextEditor;
+using MonogameTextEditor.TextEditor.CaretEditor;
+using MonogameTextEditor.TextEditor.SelectEditor;
 
 namespace MonogameTextEditor {
     public class Game1 : Game {

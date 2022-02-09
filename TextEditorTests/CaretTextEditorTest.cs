@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using MonogameTextEditor.TextEditor;
+using MonogameTextEditor.TextEditor.CaretEditor;
 using NUnit.Framework;
 
 namespace TextEditorTests
@@ -225,11 +226,11 @@ namespace TextEditorTests
 		{
 			var editor = new CaretEditor();
 			editor.Insert("Hello world!");
-			editor.MoveCaretToStartOfLine();
+			editor.MoveCaretToLineStart();
 			Assert.AreEqual(editor.Caret.Line, 0);
 			Assert.AreEqual(editor.Caret.Col, 0);
 			editor.MoveCaretToNextWord();
-			editor.MoveCaretToStartOfLine();
+			editor.MoveCaretToLineStart();
 			Assert.AreEqual(editor.Caret.Line, 0);
 			Assert.AreEqual(editor.Caret.Col, 0);
 		}
@@ -239,12 +240,12 @@ namespace TextEditorTests
 		{
 			var editor = new CaretEditor();
 			editor.Insert("Hello world!");
-			editor.MoveCaretToStartOfLine();
-			editor.MoveCaretToEndOfLine();
+			editor.MoveCaretToLineStart();
+			editor.MoveCaretToLineEnd();
 			Assert.AreEqual(editor.Caret.Line, 0);
 			Assert.AreEqual(editor.Caret.Col, 12);
 			editor.MoveCaretToPrevWord();
-			editor.MoveCaretToEndOfLine();
+			editor.MoveCaretToLineEnd();
 			Assert.AreEqual(editor.Caret.Line, 0);
 			Assert.AreEqual(editor.Caret.Col, 12);
 		}

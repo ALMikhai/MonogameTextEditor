@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonogameTextEditor.TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {
@@ -28,9 +29,9 @@ namespace MonogameTextEditor.TextEditor
 		{
 			if (!editor.HasSelection())
 				return;
-			var firstCaret = editor.StartPosition;
-			var secondCaret = editor.EndPosition;
-			if (firstCaret > secondCaret)
+			var firstCaret = editor.SelectionStart;
+			var secondCaret = editor.SelectionEnd;
+			if (firstCaret.CompareTo(secondCaret) < 0)
 				(firstCaret, secondCaret) = (secondCaret, firstCaret);
 			var caretHeight = font.MeasureString("!").Y;
 			if (firstCaret.Line != secondCaret.Line)

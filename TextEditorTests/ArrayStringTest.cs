@@ -1,4 +1,5 @@
 using MonogameTextEditor.TextEditor;
+using MonogameTextEditor.TextEditor.TextCollection;
 using NUnit.Framework;
 
 namespace TextEditorTests
@@ -9,14 +10,14 @@ namespace TextEditorTests
 		[Test]
 		public void Create()
 		{
-			var text = new ArrayStringText();
+			var text = new ArrayString();
 			Assert.AreEqual(text.ToString(), "");
 		}
 
 		[Test]
 		public void InsertLine()
 		{
-			var text = new ArrayStringText();
+			var text = new ArrayString();
 			text.Insert(0, 0, "Hello world!");
 			Assert.AreEqual(text.ToString(), "Hello world!");
 		}
@@ -24,7 +25,7 @@ namespace TextEditorTests
 		[Test]
 		public void InsertTwoLine()
 		{
-			var text = new ArrayStringText();
+			var text = new ArrayString();
 			text.Insert(0, 0, "Hello world!");
 			text.InsertLine(1, "123");
 			Assert.AreEqual(text.ToString(), "Hello world!\n123");
@@ -33,7 +34,7 @@ namespace TextEditorTests
 		[Test]
 		public void RemoveSymbol()
 		{
-			var text = new ArrayStringText();
+			var text = new ArrayString();
 			text.Insert(0, 0, "Hello world!");
 			text.Remove(0, 2, 3);
 			Assert.AreEqual(text.ToString(), "He world!");
@@ -42,7 +43,7 @@ namespace TextEditorTests
 		[Test]
 		public void RemoveLine()
 		{
-			var text = new ArrayStringText();
+			var text = new ArrayString();
 			text.Insert(0, 0, "Hello world!");
 			text.InsertLine(1, "123");
 			text.InsertLine(1, "321");
