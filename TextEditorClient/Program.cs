@@ -1,5 +1,6 @@
 ﻿using System;
 using Grpc.Core;
+using MonogameTextEditor;
 using TextEditorProtos;
 
 namespace EditorClient
@@ -23,12 +24,15 @@ namespace EditorClient
 			// Send the request
 			var response = client.GetText(request);
 
-			Console.WriteLine(response.Text);
+			using var textEditorWindow = new TextEditorWindow();
+			var multiUserEditor = textEditorWindow.Editor;
+			var selectEditor = multiUserEditor.Editor;
+
+			selectEditor.Insert(response.Text);
+			textEditorWindow.Run();
 
 			// Shutdown
 			channel.ShutdownAsync().Wait();
-			Console.WriteLine("Press any key to exit...");
-			Console.ReadKey();
 		}
 	}
 }

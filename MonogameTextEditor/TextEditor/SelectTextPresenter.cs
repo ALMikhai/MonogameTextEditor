@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct3D9;
+using TextEditor.Caret;
 using TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
@@ -22,16 +24,14 @@ namespace MonogameTextEditor.TextEditor
 		public override void Draw(SpriteBatch sb)
 		{
 			base.Draw(sb);
-			DrawSelection(sb);
+			DrawSelection(sb, editor.SelectionStart, editor.SelectionEnd);
 		}
 
-		private void DrawSelection(SpriteBatch sb)
+		protected void DrawSelection(SpriteBatch sb, ICaret firstCaret, ICaret secondCaret)
 		{
-			if (!editor.HasSelection())
+			if (firstCaret.Equals(secondCaret))
 				return;
-			var firstCaret = editor.SelectionStart;
-			var secondCaret = editor.SelectionEnd;
-			if (firstCaret.CompareTo(secondCaret) < 0)
+			if (firstCaret.CompareTo(secondCaret) > 0)
 				(firstCaret, secondCaret) = (secondCaret, firstCaret);
 			var caretHeight = font.MeasureString("!").Y;
 			if (firstCaret.Line != secondCaret.Line)

@@ -1,5 +1,5 @@
-﻿using System;
-using Grpc.Core;
+﻿using Grpc.Core;
+using MonogameTextEditor;
 using TextEditorProtos;
 
 namespace TextEditorServer
@@ -11,18 +11,19 @@ namespace TextEditorServer
 
 		public static void Main(string[] args)
 		{
+			using var textEditorWindow = new TextEditorWindow();
+			var multiUserEditor = textEditorWindow.Editor;
+			var selectEditor = multiUserEditor.Editor;
+
 			// Build a server
 			var server = new Server {
-				Services = { TextEditorService.BindService(new TextEditorServerImpl()) },
+				Services = { TextEditorService.BindService(new TextEditorServerImpl(selectEditor)) },
 				Ports = { new ServerPort(Host, Port, ServerCredentials.Insecure) }
 			};
 
-			// Start server
+			// Start server and editor
 			server.Start();
-
-			Console.WriteLine("GreeterServer listening on port " + Port);
-			Console.WriteLine("Press any key to stop the server...");
-			Console.ReadKey();
+			textEditorWindow.Run();
 
 			server.ShutdownAsync().Wait();
 		}

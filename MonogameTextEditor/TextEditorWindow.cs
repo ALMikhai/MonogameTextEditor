@@ -1,48 +1,61 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameTextEditor.TextEditor;
+using TextEditor.Caret;
 using TextEditor.CaretEditor;
+using TextEditor.MultiUserEditor;
 using TextEditor.SelectEditor;
 
-namespace MonogameTextEditor {
-    public class TextEditorWindow : Game {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private SpriteFont font;
+namespace MonogameTextEditor
+{
+	public class TextEditorWindow : Game
+	{
+		public MultiUserEditor Editor { get; }
 
-        private readonly ISelectEditor editor;
-        private SelectTextEditor textEditor;
-        private SelectTextPresenter textPresenter;
+		private GraphicsDeviceManager graphics;
+		private SpriteBatch spriteBatch;
+		private SpriteFont font;
 
-        public TextEditorWindow() {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            editor = new SelectEditor(new CaretEditor());
-        }
+		private MultiUserTextEditor textEditor;
+		private MultiUserTextPresenter textPresenter;
 
-        protected override void Initialize() {
-            textEditor = new SelectTextEditor(editor);
-            base.Initialize();
-        }
+		public TextEditorWindow()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
+			IsMouseVisible = true;
+			Editor = new MultiUserEditor();
+		}
 
-        protected override void LoadContent() {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Content.Load<SpriteFont>("myFont");
-            textPresenter = new SelectTextPresenter(editor, font, GraphicsDevice);
-        }
+		protected override void Initialize()
+		{
+			textEditor = new MultiUserTextEditor(Editor);
+			base.Initialize();
+		}
 
-        protected override void Update(GameTime gameTime) {
-            CmdObserver.Update();
-            base.Update(gameTime);
-        }
+		protected override void LoadContent()
+		{
+			spriteBatch = new SpriteBatch(GraphicsDevice);
+			font = Content.Load<SpriteFont>("myFont");
+			textPresenter = new MultiUserTextPresenter(Editor, font, GraphicsDevice);
+		}
 
-        protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin();
-            textPresenter.Draw(spriteBatch);
-            spriteBatch.End();
-            base.Draw(gameTime);
-        }
-    }
+		protected override void Update(GameTime gameTime)
+		{
+			CmdObserver.Update();
+			base.Update(gameTime);
+		}
+
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear(Color.White);
+			spriteBatch.Begin();
+
+			textPresenter.Draw(spriteBatch);
+
+			spriteBatch.End();
+			base.Draw(gameTime);
+		}
+	}
 }

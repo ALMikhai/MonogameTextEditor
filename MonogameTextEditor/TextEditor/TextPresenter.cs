@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TextEditor.Caret;
 using TextEditor.CaretEditor;
 
 namespace MonogameTextEditor.TextEditor
@@ -21,7 +22,7 @@ namespace MonogameTextEditor.TextEditor
 		public virtual void Draw(SpriteBatch sb)
 		{
 			DrawText(sb);
-			DrawCaret(sb);
+			DrawCaret(sb, editor.Caret);
 		}
 
 		private void DrawText(SpriteBatch sb)
@@ -30,12 +31,12 @@ namespace MonogameTextEditor.TextEditor
 				SpriteEffects.None, 0.5f);
 		}
 
-		private void DrawCaret(SpriteBatch sb)
+		protected void DrawCaret(SpriteBatch sb, ICaret caret)
 		{
 			var caretHeight = font.MeasureString("!").Y;
-			var line = editor.GetCurrentLine();
-			var startPosition = font.MeasureString(line.Substring(0, editor.Caret.Col)) + Vector2.UnitX;
-			startPosition.Y = caretHeight * editor.Caret.Line;
+			var line = editor.Text[caret.Line];
+			var startPosition = font.MeasureString(line.Substring(0, caret.Col)) + Vector2.UnitX;
+			startPosition.Y = caretHeight * caret.Line;
 			var endPosition = startPosition;
 			endPosition.Y += caretHeight;
 			DrawLine(sb, startPosition, endPosition);
