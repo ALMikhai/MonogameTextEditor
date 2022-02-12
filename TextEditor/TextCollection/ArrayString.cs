@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonogameTextEditor.TextEditor.TextCollection
+namespace TextEditor.TextCollection
 {
 	// TODO Maybe need to make own exception class to avoid misunderstandings.
 	public class ArrayString : ITextCollection

@@ -1,8 +1,6 @@
 using System;
-using System.Text;
-using MonogameTextEditor.TextEditor;
-using MonogameTextEditor.TextEditor.CaretEditor;
 using NUnit.Framework;
+using TextEditor.CaretEditor;
 
 namespace TextEditorTests
 {

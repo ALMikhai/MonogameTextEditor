@@ -1,4 +1,4 @@
-namespace MonogameTextEditor.TextEditor.UndoSystem
+namespace TextEditor.UndoSystem
 {
 	public interface IUndoItem
 	{

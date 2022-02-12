@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MonogameTextEditor.TextEditor.UndoSystem
+namespace TextEditor.UndoSystem
 {
 	public class UndoStack
 	{

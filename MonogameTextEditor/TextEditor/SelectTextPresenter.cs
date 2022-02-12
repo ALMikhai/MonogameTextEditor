@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameTextEditor.TextEditor.SelectEditor;
+using TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {

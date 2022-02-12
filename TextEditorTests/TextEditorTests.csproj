@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MonogameTextEditor\MonogameTextEditor.csproj" />
+      <ProjectReference Include="..\TextEditor\TextEditor.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,17 +1,17 @@
-using MonogameTextEditor.TextEditor.Caret;
-using MonogameTextEditor.TextEditor.CaretEditor;
-using MonogameTextEditor.TextEditor.TextCollection;
-using MonogameTextEditor.TextEditor.UndoSystem;
+using TextEditor.Caret;
+using TextEditor.CaretEditor;
+using TextEditor.TextCollection;
+using TextEditor.UndoSystem;
 
-namespace MonogameTextEditor.TextEditor.SelectEditor
+namespace TextEditor.SelectEditor
 {
 	public class SelectEditor : ISelectEditor
 	{
 		public ICaretEditor CaretEditor { get; }
 
-		public ICaret SelectionStart { get; } = new Caret.Caret();
+		public ICaret SelectionStart { get; } = new global::TextEditor.Caret.Caret();
 
-		public ICaret SelectionEnd { get; } = new Caret.Caret();
+		public ICaret SelectionEnd { get; } = new global::TextEditor.Caret.Caret();
 
 		public ITextCollection Text => CaretEditor.Text;
 

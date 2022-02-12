@@ -1,7 +1,7 @@
-using MonogameTextEditor.TextEditor.Caret;
-using MonogameTextEditor.TextEditor.TextCollection;
+using TextEditor.Caret;
+using TextEditor.TextCollection;
 
-namespace MonogameTextEditor.TextEditor.CaretEditor
+namespace TextEditor.CaretEditor
 {
 	public interface ICaretEditor
 	{

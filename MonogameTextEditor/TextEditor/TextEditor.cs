@@ -1,6 +1,6 @@
 using System.Windows.Forms;
-using MonogameTextEditor.TextEditor.CaretEditor;
-using MonogameTextEditor.TextEditor.SelectEditor;
+using TextEditor.CaretEditor;
+using TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {

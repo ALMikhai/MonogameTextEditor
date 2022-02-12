@@ -1,8 +1,8 @@
-using MonogameTextEditor.TextEditor.Caret;
-using MonogameTextEditor.TextEditor.CaretEditor;
-using MonogameTextEditor.TextEditor.TextCollection;
+using TextEditor.Caret;
+using TextEditor.CaretEditor;
+using TextEditor.TextCollection;
 
-namespace MonogameTextEditor.TextEditor.SelectEditor
+namespace TextEditor.SelectEditor
 {
 	public interface ISelectEditor
 	{

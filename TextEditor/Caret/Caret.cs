@@ -1,6 +1,6 @@
 using System;
 
-namespace MonogameTextEditor.TextEditor.Caret
+namespace TextEditor.Caret
 {
 	public class Caret : ICaret
 	{

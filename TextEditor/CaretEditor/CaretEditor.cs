@@ -1,12 +1,12 @@
 using System;
-using MonogameTextEditor.TextEditor.Caret;
-using MonogameTextEditor.TextEditor.TextCollection;
+using TextEditor.Caret;
+using TextEditor.TextCollection;
 
-namespace MonogameTextEditor.TextEditor.CaretEditor
+namespace TextEditor.CaretEditor
 {
 	public class CaretEditor : ICaretEditor
 	{
-		public ICaret Caret { get; } = new Caret.Caret();
+		public ICaret Caret { get; } = new global::TextEditor.Caret.Caret();
 
 		public ITextCollection Text { get; } = new ArrayString();
 

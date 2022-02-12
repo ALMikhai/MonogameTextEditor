@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameTextEditor.TextEditor;
-using MonogameTextEditor.TextEditor.CaretEditor;
-using MonogameTextEditor.TextEditor.SelectEditor;
+using TextEditor.CaretEditor;
+using TextEditor.SelectEditor;
 
 namespace MonogameTextEditor {
-    public class Game1 : Game {
+    public class TextEditorWindow : Game {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont font;
@@ -14,7 +14,7 @@ namespace MonogameTextEditor {
         private SelectTextEditor textEditor;
         private SelectTextPresenter textPresenter;
 
-        public Game1() {
+        public TextEditorWindow() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;

@@ -1,4 +1,4 @@
-namespace MonogameTextEditor.TextEditor.TextCollection
+namespace TextEditor.TextCollection
 {
 	public interface ITextCollection
 	{

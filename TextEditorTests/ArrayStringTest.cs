@@ -1,6 +1,5 @@
-using MonogameTextEditor.TextEditor;
-using MonogameTextEditor.TextEditor.TextCollection;
 using NUnit.Framework;
+using TextEditor.TextCollection;
 
 namespace TextEditorTests
 {
