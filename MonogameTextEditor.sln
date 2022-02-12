@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonogameTextEditor", "Monog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorTests", "TextEditorTests\TextEditorTests.csproj", "{F4BE6B0F-AF08-4128-B253-280204F61C5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorServer", "TextEditorServer\TextEditorServer.csproj", "{313FE5AF-4F7B-4AB8-8A2C-B8F95B4C496C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorClient", "TextEditorClient\TextEditorClient.csproj", "{D3639D1A-2F89-41DF-88D7-0AC8F1844929}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorProtos", "TextEditorProtos\TextEditorProtos.csproj", "{051826EC-2971-4719-9B6D-5A3155D66536}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditor", "TextEditor\TextEditor.csproj", "{6301F3B0-6DCE-4156-BC3D-6A84524937D7}"
 EndProject
 Global
@@ -23,6 +29,18 @@ Global
 		{F4BE6B0F-AF08-4128-B253-280204F61C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4BE6B0F-AF08-4128-B253-280204F61C5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4BE6B0F-AF08-4128-B253-280204F61C5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{313FE5AF-4F7B-4AB8-8A2C-B8F95B4C496C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{313FE5AF-4F7B-4AB8-8A2C-B8F95B4C496C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{313FE5AF-4F7B-4AB8-8A2C-B8F95B4C496C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{313FE5AF-4F7B-4AB8-8A2C-B8F95B4C496C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3639D1A-2F89-41DF-88D7-0AC8F1844929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3639D1A-2F89-41DF-88D7-0AC8F1844929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3639D1A-2F89-41DF-88D7-0AC8F1844929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3639D1A-2F89-41DF-88D7-0AC8F1844929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051826EC-2971-4719-9B6D-5A3155D66536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051826EC-2971-4719-9B6D-5A3155D66536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051826EC-2971-4719-9B6D-5A3155D66536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051826EC-2971-4719-9B6D-5A3155D66536}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6301F3B0-6DCE-4156-BC3D-6A84524937D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6301F3B0-6DCE-4156-BC3D-6A84524937D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6301F3B0-6DCE-4156-BC3D-6A84524937D7}.Release|Any CPU.ActiveCfg = Release|Any CPU

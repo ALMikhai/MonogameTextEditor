@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>EditorClient</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.19.4" />
+      <PackageReference Include="Google.Protobuf.Tools" Version="3.19.4" />
+      <PackageReference Include="Grpc" Version="2.44.0-pre2" />
+      <PackageReference Include="Grpc.Core" Version="2.44.0-pre2" />
+      <PackageReference Include="Grpc.Core.Api" Version="2.44.0-pre2" />
+      <PackageReference Include="Grpc.Tools" Version="2.44.0-pre2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TextEditorProtos\TextEditorProtos.csproj" />
+    </ItemGroup>
+
+</Project>

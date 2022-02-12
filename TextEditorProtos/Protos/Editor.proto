@@ -1,0 +1,12 @@
+syntax = "proto3";
+option csharp_namespace = "TextEditorProtos";
+
+message EditorText {
+  string text = 1;
+}
+
+message RequestText {}
+
+service TextEditorService {
+  rpc GetText(RequestText) returns (EditorText);
+}
