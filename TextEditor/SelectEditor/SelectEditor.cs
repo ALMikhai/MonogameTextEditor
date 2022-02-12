@@ -7,11 +7,17 @@ namespace TextEditor.SelectEditor
 {
 	public class SelectEditor : ISelectEditor
 	{
+		public event ISelectEditor.InsertText OnTextInsert;
+
+		public event ISelectEditor.RemoveText OnTextRemove;
+
 		public ICaretEditor CaretEditor { get; }
 
 		public ICaret SelectionStart { get; } = new global::TextEditor.Caret.Caret();
 
 		public ICaret SelectionEnd { get; } = new global::TextEditor.Caret.Caret();
+
+		public ICaret Caret => CaretEditor.Caret;
 
 		public ITextCollection Text => CaretEditor.Text;
 
@@ -123,6 +129,11 @@ namespace TextEditor.SelectEditor
 			}
 			return CaretEditor.MoveCaretDown(n);
 		}
+		public string GetCurrentLine() => CaretEditor.GetCurrentLine();
+
+		public (int Line, int Col) GetNextWordPos() => CaretEditor.GetNextWordPos();
+
+		public (int Line, int Col) GetPrevWordPos() => CaretEditor.GetPrevWordPos();
 
 		public string GetSelectedText()
 		{
@@ -273,12 +284,14 @@ namespace TextEditor.SelectEditor
 					CaretEditor.Caret.Line = line;
 					CaretEditor.Caret.Col = col;
 					CaretEditor.Insert(text);
+					OnTextInsert?.Invoke(line, col, text);
 				},
 				() => {
 					ClearSelection();
 					CaretEditor.Caret.Line = line;
 					CaretEditor.Caret.Col = col;
 					Text.Remove(line, col, text.Length);
+					OnTextRemove?.Invoke(line, col, text.Length);
 				});
 		}
 

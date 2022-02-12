@@ -1,5 +1,8 @@
 ﻿using Grpc.Core;
 using MonogameTextEditor;
+using MonogameTextEditor.TextEditor;
+using TextEditor.CaretEditor;
+using TextEditor.SelectEditor;
 using TextEditorProtos;
 
 namespace TextEditorServer
@@ -11,9 +14,10 @@ namespace TextEditorServer
 
 		public static void Main(string[] args)
 		{
-			using var textEditorWindow = new TextEditorWindow();
-			var multiUserEditor = textEditorWindow.Editor;
-			var selectEditor = multiUserEditor.Editor;
+			var selectEditor = new SelectEditor(new CaretEditor());
+			var selectTextPresenter = new SelectTextPresenter(selectEditor);
+			var selectTextEditor = new SelectTextEditor(selectEditor);
+			using var textEditorWindow = new TextEditorWindow(selectTextPresenter);
 
 			// Build a server
 			var server = new Server {

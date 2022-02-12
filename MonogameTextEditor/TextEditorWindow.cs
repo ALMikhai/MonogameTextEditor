@@ -11,26 +11,22 @@ namespace MonogameTextEditor
 {
 	public class TextEditorWindow : Game
 	{
-		public MultiUserEditor Editor { get; }
-
 		private GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
 
-		private MultiUserTextEditor textEditor;
-		private MultiUserTextPresenter textPresenter;
+		private TextPresenter textPresenter;
 
-		public TextEditorWindow()
+		public TextEditorWindow(TextPresenter presenter)
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
-			Editor = new MultiUserEditor();
+			textPresenter = presenter;
 		}
 
 		protected override void Initialize()
 		{
-			textEditor = new MultiUserTextEditor(Editor);
 			base.Initialize();
 		}
 
@@ -38,7 +34,8 @@ namespace MonogameTextEditor
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			font = Content.Load<SpriteFont>("myFont");
-			textPresenter = new MultiUserTextPresenter(Editor, font, GraphicsDevice);
+			textPresenter.GraphicsDevice = GraphicsDevice;
+			textPresenter.Font = font;
 		}
 
 		protected override void Update(GameTime gameTime)

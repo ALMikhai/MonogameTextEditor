@@ -5,8 +5,36 @@ message EditorText {
   string text = 1;
 }
 
-message RequestText {}
+message ConnectRequest {
+  string id = 1;
+}
+
+message InsertText {
+  int32 line = 1;
+  int32 col = 2;
+  string text = 3;
+}
+
+message RemoveText {
+  int32 line = 1;
+  int32 col = 2;
+  int32 lenght = 3;
+}
+
+message CaretMove {
+  int32 line = 1;
+  int32 col = 2;
+}
+
+message SelectionMove {
+  int32 line1 = 1;
+  int32 col1 = 2;
+  int32 line2 = 3;
+  int32 col2 = 4;
+}
 
 service TextEditorService {
-  rpc GetText(RequestText) returns (EditorText);
+  rpc GetText(ConnectRequest) returns (EditorText);
+  rpc TextInserted(ConnectRequest) returns (stream InsertText);
+  rpc TextRemoved(ConnectRequest) returns (stream RemoveText);
 }

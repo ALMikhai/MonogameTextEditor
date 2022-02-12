@@ -79,4 +79,33 @@ namespace MonogameTextEditor.TextEditor
 			CmdObserver.Redo += selectEditor.Redo;
 		}
 	}
+
+	public class ReadonlyTextEditor
+	{
+		public ReadonlyTextEditor(ISelectEditor selectEditor)
+		{
+			CmdObserver.MoveCharPrev += () => selectEditor.MoveCaretRight(-1);
+			CmdObserver.MoveCharNext += () => selectEditor.MoveCaretRight(1);
+			CmdObserver.MoveLinePrev += () => selectEditor.MoveCaretDown(-1);
+			CmdObserver.MoveLineNext += () => selectEditor.MoveCaretDown(1);
+			CmdObserver.Copy += () => {
+				var text = selectEditor.GetSelectedText();
+				if (!string.IsNullOrEmpty(text))
+					Clipboard.SetText(text);
+			};
+			CmdObserver.SelectCharNext += () => selectEditor.MoveSelectionRight(1);
+			CmdObserver.SelectCharPrev += () => selectEditor.MoveSelectionRight(-1);
+			CmdObserver.SelectLineNext += () => selectEditor.MoveSelectionDown(1);
+			CmdObserver.SelectLinePrev += () => selectEditor.MoveSelectionDown(-1);
+			CmdObserver.MoveWordNext += selectEditor.MoveCaretToNextWord;
+			CmdObserver.MoveWordPrev += selectEditor.MoveCaretToPrevWord;
+			CmdObserver.SelectWordNext += selectEditor.MoveSelectionToNextWord;
+			CmdObserver.SelectWordPrev += selectEditor.MoveSelectionToPrevWord;
+			CmdObserver.SelectAll += selectEditor.SelectAll;
+			CmdObserver.MoveLineStart += selectEditor.MoveCaretToLineStart;
+			CmdObserver.MoveLineEnd += selectEditor.MoveCaretToLineEnd;
+			CmdObserver.SelectLineStart += selectEditor.MoveSelectionToLineStart;
+			CmdObserver.SelectLineEnd += selectEditor.MoveSelectionToLineEnd;
+		}
+	}
 }
