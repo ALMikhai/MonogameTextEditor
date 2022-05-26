@@ -9,9 +9,9 @@ namespace TextEditorTests
 		{
 			var strBuild = new StringBuilder();
 			var random = new Random();
-			for (var i = 0; i < length; i++) {
-				var flt = random.NextDouble();
-				var shift = Convert.ToInt32(Math.Floor(25 * flt));
+			for (int i = 0; i < length; i++) {
+				double flt = random.NextDouble();
+				int shift = Convert.ToInt32(Math.Floor(25 * flt));
 				strBuild.Append(Convert.ToChar(shift + 65));
 			}
 

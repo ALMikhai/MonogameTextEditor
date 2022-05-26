@@ -1,16 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameTextEditor.TextEditor.CaretEditor;
 
 namespace MonogameTextEditor.TextEditor
 {
 	public class TextPresenter
 	{
-		private readonly ICaretEditor editor;
+		private readonly ITextEditor editor;
 		private readonly SpriteFont font;
 		private readonly Texture2D lineTexture;
 
-		public TextPresenter(ICaretEditor editor, SpriteFont font, GraphicsDevice graphicsDevice)
+		public TextPresenter(ITextEditor editor, SpriteFont font, GraphicsDevice graphicsDevice)
 		{
 			this.editor = editor;
 			this.font = font;

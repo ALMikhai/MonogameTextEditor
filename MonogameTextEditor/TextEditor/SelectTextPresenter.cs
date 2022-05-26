@@ -1,17 +1,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameTextEditor.TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {
 	public class SelectTextPresenter : TextPresenter
 	{
-		private readonly ISelectEditor editor;
+		private readonly ITextEditor editor;
 		private readonly SpriteFont font;
 		private readonly Texture2D lineTexture;
 
-		public SelectTextPresenter(ISelectEditor editor, SpriteFont font, GraphicsDevice graphicsDevice) : base(
-			editor.CaretEditor, font, graphicsDevice)
+		public SelectTextPresenter(ITextEditor editor, SpriteFont font, GraphicsDevice graphicsDevice) : base(
+			editor, font, graphicsDevice)
 		{
 			this.editor = editor;
 			this.font = font;
@@ -31,7 +30,7 @@ namespace MonogameTextEditor.TextEditor
 				return;
 			var firstCaret = editor.SelectionStart;
 			var secondCaret = editor.SelectionEnd;
-			if (firstCaret.CompareTo(secondCaret) < 0)
+			if (firstCaret.CompareTo(secondCaret) > 0)
 				(firstCaret, secondCaret) = (secondCaret, firstCaret);
 			var caretHeight = font.MeasureString("!").Y;
 			if (firstCaret.Line != secondCaret.Line)

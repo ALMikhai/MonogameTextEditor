@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
@@ -34,7 +33,6 @@ namespace MonogameTextEditor.TextEditor
 		public static event Action SelectWordNext;
 		public static event Action SelectLineStart;
 		public static event Action SelectLineEnd;
-		public static event Action SelectCurrentWord;
 		public static event Action DeleteWordPrev;
 		public static event Action DeleteWordNext;
 		public static event Action Enter;

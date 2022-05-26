@@ -1,14 +1,12 @@
 using System.Windows.Forms;
-using MonogameTextEditor.TextEditor.CaretEditor;
-using MonogameTextEditor.TextEditor.SelectEditor;
 
 namespace MonogameTextEditor.TextEditor
 {
 	public class CaretTextEditor
 	{
-		private readonly ICaretEditor caretEditor;
+		private readonly ITextEditor caretEditor;
 
-		public CaretTextEditor(ICaretEditor caretEditor)
+		public CaretTextEditor(ITextEditor caretEditor)
 		{
 			this.caretEditor = caretEditor;
 			CmdObserver.BackSpace += caretEditor.RemoveBackward;
@@ -34,9 +32,9 @@ namespace MonogameTextEditor.TextEditor
 
 	public class SelectTextEditor
 	{
-		private readonly ISelectEditor selectEditor;
+		private readonly ITextEditor selectEditor;
 
-		public SelectTextEditor(ISelectEditor selectEditor)
+		public SelectTextEditor(ITextEditor selectEditor)
 		{
 			this.selectEditor = selectEditor;
 			CmdObserver.Enter += () => selectEditor.Insert("\n");
@@ -71,8 +69,6 @@ namespace MonogameTextEditor.TextEditor
 			};
 			CmdObserver.SelectLineStart += selectEditor.MoveSelectionToLineStart;
 			CmdObserver.SelectLineEnd += selectEditor.MoveSelectionToLineEnd;
-			// TODO Write with tangerine functions from WordUtils.
-			// CmdObserver.SelectCurrentWord += selectEditor.SelectWordAtCaretPos;
 			CmdObserver.DeleteWordNext += selectEditor.RemoveNextWord;
 			CmdObserver.DeleteWordPrev += selectEditor.RemovePrevWord;
 			CmdObserver.Undo += selectEditor.Undo;
